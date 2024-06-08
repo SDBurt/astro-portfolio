@@ -1,0 +1,30 @@
+---
+import Container from "@/components/container.astro";
+import Link from "@/components/link.astro";
+import { SITE } from "@/config/site";
+---
+
+<header
+  class="fixed top-0 left-0 right-0 z-50 py-5 bg-background/75 dark:bg-background/25 backdrop-blur-sm saturate-200"
+>
+  <Container>
+    <div class="flex flex-wrap gap-y-2 justify-between">
+      <Link href="/" underline={false}>
+        <div class="font-semibold">
+          {SITE.NAME}
+        </div>
+      </Link>
+      <nav class="flex gap-1">
+        <Link href="/blog"> blog </Link>
+        <span>
+          {`/`}
+        </span>
+        <Link href="/work"> work </Link>
+        <span>
+          {`/`}
+        </span>
+        <Link href="/projects"> projects </Link>
+      </nav>
+    </div>
+  </Container>
+</header>
