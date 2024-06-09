@@ -1,25 +1,25 @@
 ---
-import '@/styles/globals.css';
+import "@/styles/globals.css";
 
-import { getCollection } from 'astro:content';
-import Container from '@/components/container.astro';
-import PageLayout from '@/layouts/page-layout.astro';
-import ArrowCard from '@/components/arrow-card.astro';
-import Link from '@/components/link.astro';
-import { dateRange } from '@/lib/utils';
-import { SITE, HOME, SOCIALS } from '@/config/site';
+import { getCollection } from "astro:content";
+import Container from "@/components/container.astro";
+import PageLayout from "@/layouts/page-layout.astro";
+import ArrowCard from "@/components/arrow-card.astro";
+import Link from "@/components/link.astro";
+import { dateRange } from "@/lib/utils";
+import { SITE, HOME, SOCIALS } from "@/config/site";
 
-const blog = (await getCollection('blog'))
+const blog = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
 
-const projects = (await getCollection('projects'))
+const projects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
 
-const allwork = (await getCollection('work'))
+const allwork = (await getCollection("work"))
   .sort(
     (a, b) =>
       new Date(b.data.dateStart).valueOf() -
@@ -38,41 +38,26 @@ const work = await Promise.all(
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
     <h4 class="animate font-semibold text-primary dark:text-white">
-      Hi, I'm Nano <span class="text-xl">👋🏻</span>
+      Hi, I'm Sean <span class="text-xl">👋🏻</span>
     </h4>
     <div class="space-y-16">
       <section>
         <article class="space-y-4">
           <p class="animate">
-            I am a minimal, seo friendly, accessible portfolio and blog for
-            developers. I am an even more lightweight version of my popular
-            theme
-            <Link
-              href="https://github.com/markhorn-dev/astro-sphere"
-              aria-label="Astro Sphere on Github"
-              external
-            >
-              Astro Sphere
-            </Link>. I have a lighthouse scores of 100 across the board for
-            performance, accesibility, best practices and SEO.
+            Welcome to my site. I'm Sean, a software engineer with three years
+            of professional experience in web development and two years of
+            professional experience in machine learning.
           </p>
           <p class="animate">
-            I come packed with full type safety, a sitemap, an rss feed,
-            markdown and mdx support (use components in your markdown) through
-            astro integrations. I am styled with tailwind and come preconfigured
-            with light, dark and system/os theme preferences out of the box.
+            I have experience collaborating in a startup environment, am quick
+            to productivity, and continually seek the opportunity to learn.
           </p>
           <p class="animate">
-            Visit
-            <Link
-              href="https://github.com/markhorn-dev/astro-nano"
-              aria-label="Astro Nano on Github"
-              external
-            >
-              Astro Nano on Github
+            Visit my
+            <Link href="https://github.com/sdburt" aria-label="Github" external>
+              Github
             </Link>
-            to fork the repository, read the docs or one-click deploy on Vercel or
-            Netlify.
+            to see my code.
           </p>
         </article>
       </section>
@@ -161,7 +146,7 @@ const work = await Promise.all(
                 >
                   {SOCIAL.NAME}
                 </Link>
-                {'/'}
+                {"/"}
               </li>
             ))
           }
