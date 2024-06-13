@@ -5,8 +5,6 @@ draft: false
 description: A software engineer with experience in machine learning, data science, and web development
 ---
 
-![Sean](/static/images/first-post-introduction/sean.jpg)
-
 Hello and welcome to my portfolio site. My name is Sean and I am a software engineer with experience in machine learning, data science, and web development.
 
 ## Background
