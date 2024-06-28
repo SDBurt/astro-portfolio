@@ -6,7 +6,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://astro-nano-demo.vercel.app",
+  site: "https://sdburt.com",
   integrations: [
     react(),
     tailwind({
