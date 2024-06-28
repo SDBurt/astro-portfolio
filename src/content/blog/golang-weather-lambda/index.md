@@ -8,8 +8,7 @@ description: How to build and deploy Go Lambda Function to AWS using Terraform
 # Building a Weather Application with AWS Lambda and API Gateway
 
 In today's world, serverless computing and Infrastructure as Code (IaC) have become game-changers for developers. This blog post will guide you through building a weather application using AWS Lambda and API Gateway, with all infrastructure managed by Terraform. This application fetches weather data from [Tomorrow.io](https://tomorrow.io) for a given city and stores it in DynamoDB. The entire project is written in Go, a powerful and efficient programming language.
-
-The code for this project can be found in my github repo [here](https://github.com/SDBurt/go-weather-lambda)
+The code for this project can be found in my [GitHub repo](https://github.com/SDBurt/go-weather-lambda).
 
 ## Prerequisites
 
