@@ -5,15 +5,15 @@ dateStart: "10/23/2023"
 dateEnd: "Present"
 ---
 
-Technical Contributions:
+### Technical Contributions
 
-1. Developing and maintaining the data pipeline for marketing
-2. System integrations
-3. AI Initiatives
+- **Developed and maintained data pipelines:** Improved marketing efficiency by implementing robust ETL processes.
+- **System integrations:** Integrated various third-party services to streamline operations and enhance functionality.
+- **AI Initiatives:** Led AI-driven projects to optimize lead generation and data analysis.
 
-Teamwork and Culture:
+### Teamwork and Culture
 
-1. Worked closely with the Team Lead and Founders in a remote settings.
-2. Contributed to brainstorming and architecture discussions.
-3. Participated in knowledge sharing.
-4. Conscious of how remote-work can be isolating; actively worked to include and communicate daily with remote team-members.
+- **Collaborated remotely:** Worked closely with the Team Lead and Founders to deliver high-quality solutions in a remote setting.
+- **Contributed to brainstorming and architecture discussions:** Played an active role in shaping project directions and technical decisions.
+- **Knowledge sharing:** Regularly participated in knowledge-sharing sessions to foster a culture of continuous learning.
+- **Remote team engagement:** Recognized the isolating nature of remote work and actively fostered daily communication to maintain team cohesion.

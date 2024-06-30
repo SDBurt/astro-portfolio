@@ -5,4 +5,8 @@ dateStart: "09/01/2019"
 dateEnd: "12/23/2019"
 ---
 
-Worked as an intern with the Revela team on a variety of tasks, such as the development, quality assurance, and improvement of analytical components.
+### Technical Contributions
+
+- Supported the Revela team in various tasks related to development, quality assurance, and improvement of analytical components.
+- Assisted in developing and enhancing data analysis tools.
+- Conducted quality assurance testing to ensure the accuracy of analytical models.
