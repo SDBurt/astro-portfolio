@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
-import PageLayout from '@/layouts/page-layout.astro';
-import Container from '@/components/container.astro';
-import { dateRange } from '@/lib/utils';
-import { WORK } from '@/config/site';
+import { getCollection } from "astro:content";
+import PageLayout from "@/layouts/page-layout.astro";
+import Container from "@/components/container.astro";
+import { dateRange } from "@/lib/utils";
+import { WORK } from "@/config/site";
 
-const collection = (await getCollection('work')).sort(
+const collection = (await getCollection("work")).sort(
   (a, b) =>
     new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf()
 );
@@ -21,7 +21,7 @@ const work = await Promise.all(
 <PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
   <Container>
     <div class="space-y-10">
-      <div class="animate font-semibold text-primary dark:text-white">Work</div>
+      <h1 class="animate font-semibold text-primary dark:text-white">Work</h1>
       <ul class="flex flex-col space-y-4">
         {
           work.map((entry) => (

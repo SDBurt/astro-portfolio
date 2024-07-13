@@ -18,35 +18,47 @@ const projects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+
+const allwork = (await getCollection("work"))
+  .sort(
+    (a, b) =>
+      new Date(b.data.dateStart).valueOf() -
+      new Date(a.data.dateStart).valueOf()
+  )
+  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
+
+const work = await Promise.all(
+  allwork.map(async (item) => {
+    const { Content } = await item.render();
+    return { ...item, Content };
+  })
+);
 ---
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h4 class="animate font-semibold text-primary dark:text-white">
-      Hi, I'm Sean <span class="text-xl">👋🏻</span>
-    </h4>
+    <h1 class="animate font-semibold text-primary dark:text-white">About</h1>
     <div class="space-y-16">
       <section>
         <article class="space-y-4">
           <p class="animate">
-            Welcome to my site. I'm a software engineer with professional
-            experience in web development and machine learning. I thrive in
-            startup environments, quickly becoming productive and continuously
-            seeking opportunities to learn and grow.
+            Hi, I'm Sean Burt, a software engineering graduate specializing in
+            AI from the University of Victoria. I started my career at
+            Hummingbird Drones, where I led the development of the Fire AI
+            project, managing the web app, cloud infrastructure, and machine
+            learning components.
           </p>
           <p class="animate">
-            I have worked on various projects, from developing robust ETL
-            processes and integrating third-party services to leading AI-driven
-            initiatives for lead generation and validation. Collaboration is key
-            to my work ethic, and I actively contribute to brainstorming
-            sessions and technical discussions.
+            I have a strong passion for web development, machine learning, and
+            data science, and I thrive in collaborative environments, ensuring
+            everyone's contributions are valued. In my spare time, I enjoy
+            working on personal projects, engaging in Kaggle competitions, and
+            taking online courses to expand my knowledge.
           </p>
           <p class="animate">
-            Visit my
-            <Link href="https://github.com/sdburt" aria-label="Github" external>
-              Github
-            </Link>
-            to see my code and explore my projects.
+            With a focus on continuous learning and innovation, I bring
+            dedication and a collaborative spirit to every project. Please take
+            a moment to see my work experience below.
           </p>
         </article>
       </section>
@@ -54,33 +66,24 @@ const projects = (await getCollection("projects"))
       <section class="animate space-y-6">
         <div class="flex flex-wrap gap-y-2 items-center justify-between">
           <h5 class="font-semibold text-primary dark:text-white">
-            Latest posts
+            Work Experience
           </h5>
-          <Link href="/blog"> See all posts </Link>
+          <Link href="/work"> See all work </Link>
         </div>
-        <ul class="flex flex-col gap-4">
+        <ul class="flex flex-col space-y-4">
           {
-            blog.map((post) => (
+            work.map((entry) => (
               <li>
-                <ArrowCard entry={post} />
-              </li>
-            ))
-          }
-        </ul>
-      </section>
-
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-primary dark:text-white">
-            Recent projects
-          </h5>
-          <Link href="/projects"> See all projects </Link>
-        </div>
-        <ul class="flex flex-col gap-4">
-          {
-            projects.map((project) => (
-              <li>
-                <ArrowCard entry={project} />
+                <div class="text-sm opacity-75">
+                  {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+                </div>
+                <div class="font-semibold text-primary dark:text-white">
+                  {entry.data.company}
+                </div>
+                <div class="text-sm opacity-75">{entry.data.role}</div>
+                <article>
+                  <entry.Content />
+                </article>
               </li>
             ))
           }
