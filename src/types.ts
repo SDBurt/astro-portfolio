@@ -15,3 +15,9 @@ export type Socials = {
   NAME: string;
   HREF: string;
 }[];
+
+export type Author = {
+  NAME: string;
+  ALUMNI_OF: string[];
+  KNOWS_ABOUT: string[];
+};

@@ -5,7 +5,7 @@ draft: false
 description: Fine-tuning distilbert for multi-label classification of toxic comments
 ---
 
-This post covers fine-tuning distilbert for multi-label classification of comments. The dataset I used can be found on [kaggle](https://www.kaggle.com/datasets/julian3833/jigsaw-toxic-comment-classification-challenge). The labels seen in this dataset are: `toxic`, `severe_toxic`, `obscene`, `threat`, `insult`, and `identity_hate`.
+This post covers fine-tuning distilbert for multi-label classification of comments. The dataset I used can be found on [kaggle](https://kaggle.com/datasets/julian3833/jigsaw-toxic-comment-classification-challenge). The labels seen in this dataset are: `toxic`, `severe_toxic`, `obscene`, `threat`, `insult`, and `identity_hate`.
 
 The code for this was inspired by this [notebook](https://github.com/rasbt/deeplearning-models/blob/master/pytorch-lightning_ipynb/transformer/distilbert-finetuning-ii.ipynb) by Sebastian Raschka [@rasbt](https://twitter.com/rasbt). It uses `Lightning` with `Pytorch`, and utilizes `Huggingface Transformers` to load the base model and tokenizer for `distilbert-base-uncased`
 
@@ -31,7 +31,7 @@ tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased", is_split_in
 
 ## Model
 
-When using `AutoModelForSequenceClassification.from_pretrained()` for multi-label classification, the `problem_type` needs to be set to `multi_label_classification`. This solution was discovered through [alexander's post](https://www.alexanderjunge.net/blog/til-multi-label-automodelforsequenceclassification/) after looking through the official documentation for multi-label classification. The official documentation was not updated for [this pr](https://github.com/huggingface/transformers/pull/14180) This changes the loss function to `BCEWithLogitsLoss()` from `CrossEntropyLoss()` or `MSELoss()` (depending on the problem type).
+When using `AutoModelForSequenceClassification.from_pretrained()` for multi-label classification, the `problem_type` needs to be set to `multi_label_classification`. This solution was discovered through [alexander's post](https://alexanderjunge.net/blog/til-multi-label-automodelforsequenceclassification/) after looking through the official documentation for multi-label classification. The official documentation was not updated for [this pr](https://github.com/huggingface/transformers/pull/14180) This changes the loss function to `BCEWithLogitsLoss()` from `CrossEntropyLoss()` or `MSELoss()` (depending on the problem type).
 
 ```python
 model = AutoModelForSequenceClassification.from_pretrained(
