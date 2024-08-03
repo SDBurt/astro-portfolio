@@ -8,8 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "biome lint .",
+    "format": "biome format . "
   },
   "dependencies": {
     "@astrojs/check": "^0.9.1",
@@ -31,14 +31,10 @@
     "@tailwindcss/typography": "^0.5.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.12.0",
-    "@typescript-eslint/parser": "^7.12.0",
     "@vercel/speed-insights": "^1.0.11",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
-    "eslint-plugin-astro": "^1.2.0",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
     "globals": "^15.4.0",
     "lucide-react": "^0.390.0",
     "react": "^18.3.1",
@@ -50,12 +46,10 @@
     "vaul": "^0.9.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.4.0",
-    "@types/eslint__js": "^8.42.3",
-    "astro": "^4.13.1",
-    "eslint": "^9.4.0",
+    "@biomejs/biome": "1.8.3",
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1",
     "shadcn-ui": "^0.8.0",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^7.12.0"
+    "typescript": "^5.4.5"
   }
 }
