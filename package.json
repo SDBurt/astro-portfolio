@@ -49,6 +49,7 @@
     "@biomejs/biome": "1.8.3",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
+    "astro": "^4.13.1",
     "shadcn-ui": "^0.8.0",
     "typescript": "^5.4.5"
   }

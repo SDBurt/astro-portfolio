@@ -108,6 +108,9 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
+      astro:
+        specifier: ^4.13.1
+        version: 4.13.1(typescript@5.4.5)
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
