@@ -1,5 +1,9 @@
 import type { Site, Metadata, Socials, Author } from "@/types";
 
+export const SEPARATOR = "|";
+
+export const SITE_TITLE = "Sean Burt";
+
 export const SITE: Site = {
   NAME: "SDBurt",
   EMAIL: "seandburt@gmail.com",
@@ -15,22 +19,27 @@ export const AUTHOR: Author = {
 };
 
 export const HOME: Metadata = {
-  TITLE: "Sean Burt - Software Engineer, Gamer, and Dog Dad",
+  TITLE: "Software Engineer, Gamer, and Dog Dad",
   DESCRIPTION: "Personal website of Sean Burt. Software Engineer, Gamer, and Dog Dad.",
 };
 
 export const BLOG: Metadata = {
-  TITLE: "Sean Burt's Blog - Articles on Software Engineering, Gaming, and Dogs",
+  TITLE: "Articles on Software Engineering, Gaming, and Dogs",
   DESCRIPTION: "A collection of articles on topics I am passionate about.",
 };
 
+export const ABOUT: Metadata = {
+  TITLE: "More information about Sean Burt",
+  DESCRIPTION: "More information about Sean Burt, a Software Engineer, Gamer, and Dog Dad.",
+};
+
 export const WORK: Metadata = {
-  TITLE: "Sean Burt's Professional Work - Experience and Achievements",
+  TITLE: "Professional Experience and Achievements",
   DESCRIPTION: "Where I have worked and what I have done.",
 };
 
 export const PROJECTS: Metadata = {
-  TITLE: "Sean Burt's Projects - Repositories and Demos",
+  TITLE: "Projects, Repositories, and Demos",
   DESCRIPTION: "A collection of my projects, with links to repositories and demos.",
 };
 

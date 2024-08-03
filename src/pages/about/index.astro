@@ -4,20 +4,9 @@ import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import Container from "@/components/container.astro";
 import PageLayout from "@/layouts/page-layout.astro";
-import ArrowCard from "@/components/arrow-card.astro";
 import Link from "@/components/link.astro";
 import { dateRange } from "@/lib/utils";
-import { SITE, HOME, SOCIALS } from "@/config/site";
-
-const blog = (await getCollection("blog"))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE);
-
-const projects = (await getCollection("projects"))
-  .filter((project) => !project.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE);
+import { SITE, ABOUT, SOCIALS } from "@/config/site";
 
 const allwork = (await getCollection("work"))
   .sort(
@@ -35,10 +24,12 @@ const work = await Promise.all(
 );
 ---
 
-<PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
+<PageLayout title={ABOUT.TITLE} description={ABOUT.DESCRIPTION}>
   <Container>
-    <h1 class="animate font-semibold text-primary dark:text-white">About</h1>
-    <div class="space-y-16">
+    <div class="space-y-10">
+      <h1 class="animate font-bold text-primary dark:text-white">
+        {ABOUT.TITLE}
+      </h1>
       <section>
         <article class="space-y-4">
           <p class="animate">

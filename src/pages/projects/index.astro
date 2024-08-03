@@ -13,8 +13,8 @@ const projects = (await getCollection("projects"))
 <PageLayout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
   <Container>
     <div class="space-y-10">
-      <h1 class="animate font-semibold text-primary dark:text-white">
-        Projects
+      <h1 class="animate font-bold text-primary dark:text-white">
+        {PROJECTS.TITLE}
       </h1>
       <ul class="animate flex flex-col gap-4">
         {
