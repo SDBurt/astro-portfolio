@@ -1,43 +1,53 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
-	"files": {
-	  "ignoreUnknown": true,
-	  "ignore": [
-		"node_modules/*",
-		"*.config.*",
-		"*.json",
-		"tsconfig.json",
-		"**/dist",
-		"**/out",
-		".astro"
-	  ]
-	},
-	"organizeImports": {
-	  "enabled": true
-	},
-	"linter": {
-	  "enabled": true,
-	  "rules": {
-		"recommended": true,
-		"complexity": {
-		  "noForEach": "off",
-		  "noUselessFragments": "off"
-		},
-		"correctness": {
-		  "useExhaustiveDependencies": "off",
-		  "noUnusedImports": "warn",
-		  "noUnusedVariables": "warn"
-		},
-		"style": {
-		  "noParameterAssign": "off"
-		}
-	  }
-	},
-	"formatter": {
-	  "enabled": true,
-	  "formatWithErrors": false,
-	  "indentStyle": "space",
-	  "lineEnding": "lf",
-	  "lineWidth": 120
-	}
-  }
+  "$schema": "https://biomejs.dev/schemas/1.6.4/schema.json",
+  "files": {
+    "ignoreUnknown": true,
+    "ignore": [
+      "node_modules/*",
+      "*.config.*",
+      "*.json",
+      "tsconfig.json",
+      "**/dist",
+      "**/out"
+    ]
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noForEach": "off",
+        "noUselessFragments": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
+      },
+      "style": {
+        "noParameterAssign": "off"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "lineEnding": "lf",
+    "lineWidth": 120
+  },
+  "overrides": [
+    {
+      "include": ["*.astro"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "off",
+            "useImportType": "off"
+          }
+        }
+      }
+    }
+  ]
+}
