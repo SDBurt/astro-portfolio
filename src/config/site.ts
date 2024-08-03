@@ -15,22 +15,22 @@ export const AUTHOR: Author = {
 };
 
 export const HOME: Metadata = {
-  TITLE: "Home",
+  TITLE: "Sean Burt - Software Engineer, Gamer, and Dog Dad",
   DESCRIPTION: "Personal website of Sean Burt. Software Engineer, Gamer, and Dog Dad.",
 };
 
 export const BLOG: Metadata = {
-  TITLE: "Blog",
+  TITLE: "Sean Burt's Blog - Articles on Software Engineering, Gaming, and Dogs",
   DESCRIPTION: "A collection of articles on topics I am passionate about.",
 };
 
 export const WORK: Metadata = {
-  TITLE: "Work",
+  TITLE: "Sean Burt's Professional Work - Experience and Achievements",
   DESCRIPTION: "Where I have worked and what I have done.",
 };
 
 export const PROJECTS: Metadata = {
-  TITLE: "Projects",
+  TITLE: "Sean Burt's Projects - Repositories and Demos",
   DESCRIPTION: "A collection of my projects, with links to repositories and demos.",
 };
 
