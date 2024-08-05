@@ -9,11 +9,11 @@ This post covers fine-tuning distilbert for multi-label classification of commen
 
 The code for this was inspired by this [notebook](https://github.com/rasbt/deeplearning-models/blob/master/pytorch-lightning_ipynb/transformer/distilbert-finetuning-ii.ipynb) by Sebastian Raschka [@rasbt](https://twitter.com/rasbt). It uses `Lightning` with `Pytorch`, and utilizes `Huggingface Transformers` to load the base model and tokenizer for `distilbert-base-uncased`
 
-# Gotchas
+## Gotchas
 
 The following sections talk a bit about some of the additional things you need to change in Sebastian's notebook to make this work. The code is not perfect, but it worked pretty well and got decent results with little to no pre-processing of the comments.
 
-## Tokenizer
+### Tokenizer
 
 - Make sure the input are strings, not `null` or `NaN`
   - Otherwise you will get an error, show below, which is returned when you have something that cannot be tokenized in the input.
@@ -29,7 +29,7 @@ Additionally, I have the `is_split_into_words` flag set to `True` when loading t
 tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased", is_split_into_words=True)
 ```
 
-## Model
+### Model
 
 When using `AutoModelForSequenceClassification.from_pretrained()` for multi-label classification, the `problem_type` needs to be set to `multi_label_classification`. This solution was discovered through [alexander's post](https://alexanderjunge.net/blog/til-multi-label-automodelforsequenceclassification/) after looking through the official documentation for multi-label classification. The official documentation was not updated for [this pr](https://github.com/huggingface/transformers/pull/14180) This changes the loss function to `BCEWithLogitsLoss()` from `CrossEntropyLoss()` or `MSELoss()` (depending on the problem type).
 
@@ -43,7 +43,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 
 - Additionally, you will need to add the number of labels as a property of the `LightningModule`.
 
-## Metrics
+### Metrics
 
 If you are using torchmetrics for accuracy like I did, you will need to either add `task=multilabel` to the accuracy method, or import `MultilabelAccuracy` directly and set `num_labels` to the desired number (6, for my problem).
 
@@ -52,7 +52,7 @@ self.val_acc = MultilabelAccuracy(num_labels=6)
 self.test_acc = MultilabelAccuracy(num_labels=6)
 ```
 
-# Code
+## Code
 
 The following show the code I used to finetune the model for multi-label sequence classification
 
@@ -60,29 +60,29 @@ The following show the code I used to finetune the model for multi-label sequenc
 import os
 import random
 
-# pathing
+## pathing
 from pathlib import Path
 
-# For data manipulation
+## For data manipulation
 import numpy as np
 import pandas as pd
 
-# Pytorch Imports
+## Pytorch Imports
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 
-# Lighting Imports
+## Lighting Imports
 import pytorch_lightning as pt
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.trainer import Trainer
 from pytorch_lightning.core import LightningModule
 
-# Finetune scheduler
+## Finetune scheduler
 from finetuning_scheduler import FinetuningScheduler
 
-# Torchmetrics
+## Torchmetrics
 from torchmetrics.classification import MultilabelAccuracy
 ```
 
@@ -143,7 +143,7 @@ class LightningModel(LightningModule):
 
         self.log("train_loss", outputs["loss"])
 
-        return outputs["loss"]  # this is passed to the optimizer for training
+        return outputs["loss"]  ## this is passed to the optimizer for training
 
 
     def validation_step(self, batch, batch_idx):
@@ -191,26 +191,26 @@ class LightningModel(LightningModule):
 Open the kaggle dataset `train.csv` file and perform some steps to prepare it for our model.
 
 ```python
-# Define a variable to store the input and temp output path
+## Define a variable to store the input and temp output path
 input_path = Path("input/")
 output_path = Path("output/")
 
-# Read the train csv file, rename the comment_text column, and make sure
-# the column is a lowercase string
+## Read the train csv file, rename the comment_text column, and make sure
+## the column is a lowercase string
 df = pd.read_csv(input_path / "train.csv").dropna()
 df = df.rename(columns={"comment_text": "text"})
 df["text"] = df["text"].str.lower()
 
-# Drop the ID field since we don't need it
+## Drop the ID field since we don't need it
 df.drop(columns=["id"], inplace=True)
 
-# Shuffle the dataframe and split the data into train, validation, and test
+## Shuffle the dataframe and split the data into train, validation, and test
 df_shuffled = df.sample(frac=1, random_state=1).reset_index()
 df_train = df_shuffled.iloc[:100_000]
 df_val = df_shuffled.iloc[100_000:140_000]
 df_test = df_shuffled.iloc[140_000:]
 
-# Save the new shuffled data into csv files to be opened later
+## Save the new shuffled data into csv files to be opened later
 df_train.to_csv(output_path / "train.csv", index=False, encoding="utf-8")
 df_val.to_csv(output_path / "validation.csv", index=False, encoding="utf-8")
 df_test.to_csv(output_path / "test.csv", index=False, encoding="utf-8")
@@ -247,12 +247,12 @@ jigsaw_tokenized.set_format("torch", columns=["input_ids", "attention_mask", "to
 ```
 
 ```python
-# Create the datasets
+## Create the datasets
 train_dataset = JigsawDataset(jigsaw_tokenized, partition_key="train")
 val_dataset = JigsawDataset(jigsaw_tokenized, partition_key="validation")
 test_dataset = JigsawDataset(jigsaw_tokenized, partition_key="test")
 
-# Create the dataloaders
+## Create the dataloaders
 train_loader = DataLoader(
     dataset=train_dataset,
     batch_size=4,
@@ -277,7 +277,7 @@ test_loader = DataLoader(
 lightning_model = LightningModel(model)
 
 callbacks = [
-    ModelCheckpoint(save_top_k=1, mode="max", monitor="val_acc"),  # save top 1 model
+    ModelCheckpoint(save_top_k=1, mode="max", monitor="val_acc"),  ## save top 1 model
     FinetuningScheduler()
 ]
 
@@ -300,7 +300,7 @@ trainer.fit(
 ```
 
 ```python
-# Test the train, val, and test loaders
+## Test the train, val, and test loaders
 trainer.test(lightning_model, dataloaders=train_loader, ckpt_path="best")
 trainer.test(lightning_model, dataloaders=val_loader, ckpt_path="best")
 trainer.test(lightning_model, dataloaders=test_loader, ckpt_path="best")
