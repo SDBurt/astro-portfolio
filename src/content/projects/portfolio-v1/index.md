@@ -1,5 +1,5 @@
 ---
-title: "Portfolio V1"
+title: "Nextjs Portfolio"
 description: "First Portfolio built with NextJS and React"
 date: "Jan 31, 2023"
 repoURL: "https://github.com/SDBurt/sdburt.com"
