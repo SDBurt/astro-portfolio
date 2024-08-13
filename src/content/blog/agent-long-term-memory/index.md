@@ -5,11 +5,9 @@ draft: true
 description: How to Build an AI agent with long-term memory using Python & LangChain
 ---
 
-## Building a Scalable FastAPI App with LangChain & LangGraph AI Agents
-
 In this post, I'll guide you through the process of creating a professional, modular, and scalable FastAPI application. This app will serve three LangChain and LangGraph AI agents with long-term memory capabilities. The first agent answers questions, the second analyzes the responses for potential memories, and the third validates these memories before storing them in a database.
 
-### Project Structure
+## Project Structure
 
 We'll structure our project to be modular and maintainable. Here's an overview of the project structure:
 
@@ -48,11 +46,11 @@ langchain_app/
 └── README.md
 ```
 
-### Setting Up FastAPI
+## Setting Up FastAPI
 
 Let's start by setting up our FastAPI application.
 
-#### Install Dependencies
+### Install Dependencies
 
 Create a `requirements.txt` file and add the following dependencies:
 
@@ -71,12 +69,12 @@ Then, install the dependencies:
 pip install -r requirements.txt
 ```
 
-#### Application Configuration
+### Application Configuration
 
 Create a `config.py` file in the `core` directory to manage our application configuration:
 
 ```python
-## app/core/config.py
+# app/core/config.py
 
 from pydantic import BaseSettings
 
@@ -87,12 +85,12 @@ class Settings(BaseSettings):
 settings = Settings()
 ```
 
-#### Database Setup
+### Database Setup
 
 Create a `database.py` file in the `utils` directory to handle our database connection:
 
 ```python
-## app/utils/database.py
+# app/utils/database.py
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -104,12 +102,12 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 ```
 
-#### Memory Model
+### Memory Model
 
 Define a `Memory` model in the `models` directory to represent long-term memory entries:
 
 ```python
-## app/models/memory.py
+# app/models/memory.py
 
 from sqlalchemy import Column, Integer, String, Text, Boolean
 from app.utils.database import Base
@@ -123,12 +121,12 @@ class Memory(Base):
     long_term = Column(Boolean, default=False)
 ```
 
-#### Memory Schema
+### Memory Schema
 
 Create a `memory.py` file in the `schemas` directory to define Pydantic schemas:
 
 ```python
-## app/schemas/memory.py
+# app/schemas/memory.py
 
 from pydantic import BaseModel
 
@@ -146,12 +144,12 @@ class Memory(MemoryBase):
         orm_mode = True
 ```
 
-#### Abstract Service Class
+### Abstract Service Class
 
 Create a `base_service.py` file in the `services` directory for our abstract service class:
 
 ```python
-## app/services/base_service.py
+# app/services/base_service.py
 
 from abc import ABC, abstractmethod
 
@@ -169,12 +167,12 @@ class BaseService(ABC):
         pass
 ```
 
-#### LangChain Service
+### LangChain Service
 
 Create a `langchain_service.py` file in the `services` directory to handle LangChain logic:
 
 ```python
-## app/services/langchain_service.py
+# app/services/langchain_service.py
 
 from langchain import LangChain
 from app.models.memory import Memory
@@ -216,12 +214,12 @@ Is this a valid memory?")
         return memory
 ```
 
-#### API Endpoints
+### API Endpoints
 
 Create an `endpoints` directory and define our LangChain endpoints:
 
 ```python
-## app/api/endpoints/langchain.py
+# app/api/endpoints/langchain.py
 
 from fastapi import APIRouter, Depends
 from app.services.langchain_service import LangChainService
@@ -235,12 +233,12 @@ def ask_question(question: MemoryBase, service: LangChainService = Depends()):
     return {"response": response}
 ```
 
-#### Main Application
+### Main Application
 
 Wire everything together in the `main.py` file:
 
 ```python
-## app/main.py
+# app/main.py
 
 from fastapi import FastAPI
 from app.core.config import settings
@@ -254,12 +252,12 @@ app = FastAPI()
 app.include_router(langchain.router, prefix=settings.API_V1_STR)
 ```
 
-#### Docker Setup
+### Docker Setup
 
 Create a `Dockerfile` and a `docker-compose.yml` file to containerize the application:
 
 ```Dockerfile
-## Dockerfile
+# Dockerfile
 
 FROM python:3.9-slim
 
@@ -273,7 +271,7 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
 ```yaml
-## docker-compose.yml
+# docker-compose.yml
 
 version: "3.8"
 
@@ -288,6 +286,6 @@ services:
       - DATABASE_URL=sqlite:///./test.db
 ```
 
-### Conclusion
+## Conclusion
 
 By following this guide, you've set up a professional, modular, and scalable FastAPI application for serving an AI agents with long-term memory capabilities. This structure allows for easy maintenance and scalability as your project grows. Happy coding!

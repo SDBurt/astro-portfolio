@@ -9,9 +9,9 @@ This post covers fine-tuning distilbert for multi-label classification of commen
 
 The code for this was inspired by this [notebook](https://github.com/rasbt/deeplearning-models/blob/master/pytorch-lightning_ipynb/transformer/distilbert-finetuning-ii.ipynb) by Sebastian Raschka [@rasbt](https://twitter.com/rasbt). It uses `Lightning` with `Pytorch`, and utilizes `Huggingface Transformers` to load the base model and tokenizer for `distilbert-base-uncased`
 
-## Gotchas
+## Notes
 
-The following sections talk a bit about some of the additional things you need to change in Sebastian's notebook to make this work. The code is not perfect, but it worked pretty well and got decent results with little to no pre-processing of the comments.
+The following sections talk a bit about some of the additional things you need to change in Sebastian's notebook to make this work. The following code is not perfect, but it worked pretty well and got decent results with little to no pre-processing of the comments.
 
 ### Tokenizer
 
@@ -56,6 +56,8 @@ self.test_acc = MultilabelAccuracy(num_labels=6)
 
 The following show the code I used to finetune the model for multi-label sequence classification
 
+### Imports
+
 ```python
 import os
 import random
@@ -86,6 +88,8 @@ from finetuning_scheduler import FinetuningScheduler
 from torchmetrics.classification import MultilabelAccuracy
 ```
 
+### Tokenizer
+
 Define the tokenizer. Notice that the defined the `problem_type` flag in `from_pretrained`
 
 ```python
@@ -96,7 +100,9 @@ model = AutoModelForSequenceClassification.from_pretrained(
 )
 ```
 
-Define the dataset
+### Dataset Class
+
+Define the dataset using the following code.
 
 ```python
 class JigsawDataset(Dataset):
@@ -110,7 +116,9 @@ class JigsawDataset(Dataset):
         return self.partition.num_rows
 ```
 
-Define the lightning Model. This has 6 labels and shows some of the gotchas mentioned above regarding the `MultilabelAccuracy` metrics, and the `self.num_labels` property
+### Lightning Model
+
+This has 6 labels and shows some of the gotchas mentioned above regarding the `MultilabelAccuracy` metrics, and the `self.num_labels` property
 
 ```python
 class LightningModel(LightningModule):
@@ -188,6 +196,8 @@ class LightningModel(LightningModule):
 
 ```
 
+### Prepare the Data
+
 Open the kaggle dataset `train.csv` file and perform some steps to prepare it for our model.
 
 ```python
@@ -216,6 +226,8 @@ df_val.to_csv(output_path / "validation.csv", index=False, encoding="utf-8")
 df_test.to_csv(output_path / "test.csv", index=False, encoding="utf-8")
 ```
 
+### Load the Dataset
+
 Define the dataset using `load_data` from `Dataset`
 
 ```python
@@ -231,6 +243,8 @@ jigsaw_dataset = load_dataset(
 )
 ```
 
+### Tokenize the inputs
+
 Tokenize the input text
 
 ```python
@@ -245,6 +259,8 @@ jigsaw_tokenized = jigsaw_dataset.map(tokenize_text, batched=True, batch_size=No
 
 jigsaw_tokenized.set_format("torch", columns=["input_ids", "attention_mask", "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"])
 ```
+
+### Create the Dataloaders
 
 ```python
 ## Create the datasets
@@ -305,6 +321,8 @@ trainer.test(lightning_model, dataloaders=train_loader, ckpt_path="best")
 trainer.test(lightning_model, dataloaders=val_loader, ckpt_path="best")
 trainer.test(lightning_model, dataloaders=test_loader, ckpt_path="best")
 ```
+
+## Results
 
 This outputs the following results
 

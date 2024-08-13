@@ -2,15 +2,13 @@
 title: Build a Golang Weather Lambda Function
 date: "2024-06-26"
 draft: false
-description: How to build and deploy Go Lambda Function to AWS using Terraform
+description: How to build and deploy a Go Lambda Function to AWS using Terraform
 ---
-
-## Building a Weather Application with AWS Lambda and API Gateway
 
 In today's world, serverless computing and Infrastructure as Code (IaC) have become game-changers for developers. This blog post will guide you through building a weather application using AWS Lambda and API Gateway, with all infrastructure managed by Terraform. This application fetches weather data from [Tomorrow.io](https://tomorrow.io) for a given city and stores it in DynamoDB. The entire project is written in Go, a powerful and efficient programming language.
 The code for this project can be found in my [GitHub repo](https://github.com/SDBurt/go-weather-lambda).
 
-### Prerequisites
+## Prerequisites
 
 Before we start, ensure you have the following prerequisites:
 
@@ -19,7 +17,7 @@ Before we start, ensure you have the following prerequisites:
 - Golang installed
 - Terraform installed
 
-### Overview of the Project
+## Overview of the Project
 
 The weather application leverages the following AWS services:
 
@@ -28,7 +26,7 @@ The weather application leverages the following AWS services:
 - **DynamoDB**: Stores the fetched weather data.
 - **IAM Roles and Policies**: Manages permissions for accessing AWS resources.
 
-### Project Structure
+## Project Structure
 
 The project is organized as follows:
 
@@ -64,11 +62,11 @@ weather-app/
 └── README.md
 ```
 
-### Setting Up Terraform Backend
+## Setting Up Terraform Backend
 
 Using Terraform to manage infrastructure state remotely is a best practice. We will use an S3 bucket and a DynamoDB table for state locking and consistency.
 
-#### Step 1: Create an S3 Bucket and DynamoDB Table
+### Step 1: Create an S3 Bucket and DynamoDB Table
 
 Execute the following commands to set up the backend:
 
@@ -79,7 +77,7 @@ aws dynamodb create-table --table-name terraform-lock --attribute-definitions At
 
 This code creates a bucket to store the state and a dynamodb table to handle locking the state for deployments.
 
-#### Step 2: Update the `backend.tf` File
+### Step 2: Update the `backend.tf` File
 
 Update the `backend.tf` file with your S3 bucket name and DynamoDB table name:
 
@@ -94,11 +92,11 @@ terraform {
 }
 ```
 
-### Setting Up the Terraform Configuration
+## Setting Up the Terraform Configuration
 
 We'll create the necessary AWS resources using Terraform. Below is the configuration for our infrastructure.
 
-#### main.tf
+### main.tf
 
 ```hcl
 provider "aws" {
@@ -217,7 +215,7 @@ resource "aws_apigatewayv2_stage" "stage" {
 }
 ```
 
-#### variables.tf
+### variables.tf
 
 ```hcl
 variable "WEATHER_API_KEY" {
@@ -237,7 +235,7 @@ variable "VERSION" {
 }
 ```
 
-#### outputs.tf
+### outputs.tf
 
 ```hcl
 output "api_endpoint" {
@@ -246,7 +244,7 @@ output "api_endpoint" {
 }
 ```
 
-#### backend.tf
+### backend.tf
 
 ```hcl
 terraform {
@@ -258,11 +256,11 @@ terraform {
 }
 ```
 
-### Writing the Lambda Function
+## Writing the Lambda Function
 
 Next, let's write the Lambda function in Go. This function handles requests from API Gateway, fetches weather data, caches the results, and stores the data in DynamoDB.
 
-#### handler.go
+### handler.go
 
 ```go
 package handler
@@ -340,7 +338,7 @@ func buildResponse(data interface{}) (events.APIGatewayProxyResponse, error) {
 }
 ```
 
-#### main.go
+### main.go
 
 ```go
 package main
@@ -355,7 +353,7 @@ func main() {
 }
 ```
 
-#### cache.go
+### cache.go
 
 ```go
 package cache
@@ -386,7 +384,7 @@ func GetCache(key string) (interface{}, bool) {
 }
 ```
 
-#### weather.go
+### weather.go
 
 ```go
 package weather
@@ -478,7 +476,7 @@ func FetchWeather(city string) (WeatherResponse, error) {
 }
 ```
 
-#### log.go
+### log.go
 
 ```go
 package log
@@ -502,7 +500,7 @@ func Error(msg string) {
 }
 ```
 
-#### db.go
+### db.go
 
 ```go
 package db
@@ -552,14 +550,14 @@ func SaveWeatherData(data WeatherData) error {
 }
 ```
 
-#### .env (example)
+### .env (example)
 
 ```plaintext
 WEATHER_API_KEY=<your_tomorrow_io_api_key>
 DB_TABLE_NAME=weather-data
 ```
 
-### Deploying the Lambda Function
+## Deploying the Lambda Function
 
 Compile the Go code and create a zip file to deploy the Lambda function.
 For this particular project, we are building and deploying to the arm64 architecture.
@@ -569,7 +567,7 @@ GOOS=linux GOARCH=arm64 go build -o main main.go
 zip lambda-handler.zip main
 ```
 
-### Applying the Terraform Configuration
+## Applying the Terraform Configuration
 
 Initialize and apply the Terraform configuration to deploy the resources.
 
@@ -578,7 +576,7 @@ terraform init
 terraform apply
 ```
 
-### Testing the API
+## Testing the API
 
 Once the resources are deployed, use the output `api_endpoint` to make requests to your API.
 
@@ -586,7 +584,7 @@ Once the resources are deployed, use the output `api_endpoint` to make requests 
 curl -X GET "<api_endpoint>/weather?city=london"
 ```
 
-### Cleaning Up
+## Cleaning Up
 
 To remove the Lambda function and associated resources, destroy the Terraform-managed infrastructure.
 
@@ -594,7 +592,7 @@ To remove the Lambda function and associated resources, destroy the Terraform-ma
 terraform destroy -auto-approve
 ```
 
-### Conclusion
+## Conclusion
 
 This blog post walked you through setting up a weather application using AWS Lambda and API Gateway with Terraform. By following these steps, you can build a scalable, serverless application with Go and manage it using Infrastructure as Code.
 
