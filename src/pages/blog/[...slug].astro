@@ -44,13 +44,13 @@ const { Content, headings } = await post.render();
       </h1>
     </div>
     <div class="flex flex-row space-x-8">
-      <article class="flex flex-col animate w-2/3">
+      <article class="flex flex-col animate w-full">
         <Content />
       </article>
       <div class="relative">
-      <aside class="sticky animate top-20">
+      <!-- <aside class="sticky animate top-20">
         <TableOfContents headings={headings} />
-      </aside>
+      </aside> -->
     </div>
     </div>
   </Container>
