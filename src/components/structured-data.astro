@@ -1,0 +1,118 @@
+---
+import { SITE, HOME } from "@/config/site";
+
+interface Props {
+  type: "website" | "article" | "person" | "portfolio";
+  title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  datePublished?: Date;
+  dateModified?: Date;
+  author?: string;
+  tags?: string[];
+}
+
+const {
+  type,
+  title = SITE.NAME,
+  description = HOME.DESCRIPTION,
+  image = "/nano.png",
+  url = Astro.url.href,
+  datePublished,
+  dateModified,
+  author = "Sean Burt",
+  tags = [],
+} = Astro.props;
+
+const baseUrl = Astro.site?.href || "https://www.sdburt.com";
+const imageUrl = new URL(image, baseUrl).href;
+
+let structuredData: any = {
+  "@context": "https://schema.org",
+  "@type": type === "website" ? "WebSite" : type === "article" ? "BlogPosting" : type === "person" ? "Person" : "CreativeWork",
+  name: title,
+  description,
+  url,
+  image: imageUrl,
+};
+
+if (type === "website") {
+  structuredData = {
+    ...structuredData,
+    author: {
+      "@type": "Person",
+      name: author,
+      url: baseUrl,
+      jobTitle: "Software Engineer",
+      worksFor: {
+        "@type": "Organization",
+        name: "Consumer Genius"
+      }
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${baseUrl}/blog?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+} else if (type === "article") {
+  structuredData = {
+    ...structuredData,
+    headline: title,
+    datePublished: datePublished?.toISOString(),
+    dateModified: dateModified?.toISOString() || datePublished?.toISOString(),
+    author: {
+      "@type": "Person",
+      name: author,
+      url: baseUrl
+    },
+    publisher: {
+      "@type": "Person",
+      name: author,
+      url: baseUrl
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url
+    },
+    keywords: tags.join(", ")
+  };
+} else if (type === "person") {
+  structuredData = {
+    ...structuredData,
+    "@type": "Person",
+    givenName: "Sean",
+    familyName: "Burt",
+    jobTitle: "Software Engineer",
+    worksFor: {
+      "@type": "Organization",
+      name: "Consumer Genius"
+    },
+    alumniOf: {
+      "@type": "EducationalOrganization",
+      name: "University of Victoria"
+    },
+    knowsAbout: [
+      "Software Engineering",
+      "Machine Learning",
+      "Data Engineering",
+      "Web Development",
+      "AI",
+      "Data Science"
+    ],
+    sameAs: [
+      "https://github.com/sdburt",
+      "https://linkedin.com/in/sean-d-burt"
+    ]
+  };
+}
+
+// Remove undefined values
+structuredData = JSON.parse(JSON.stringify(structuredData));
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />

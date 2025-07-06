@@ -16,11 +16,55 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.local
+.env.*.local
+
+# API keys and secrets
+*.key
+*.pem
+config/secrets.json
+secrets/
+.secrets
+
+# Claude Code and AI assistants
+CLAUDE.md
+.claude/
+.ai/
+
+# Auth tokens and credentials
+.auth
+.credentials
+auth.json
+.token
+*.token
 
 # macOS-specific files
 .DS_Store
+.AppleDouble
+.LSOverride
+Icon?
 
-# jetbrains setting folder
+# Windows-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux-specific files
+*~
+
+# Editor directories and files
 .idea/
+.vscode/
+*.swp
+*.swo
+*~
 
-.vscode
+# Temporary files
+*.tmp
+*.temp
+.cache/
+temp/
+
+# OS generated files
+.Spotlight-V100
+.Trashes

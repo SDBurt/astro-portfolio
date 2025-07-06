@@ -1,33 +1,44 @@
 ---
-type Props = {
-  href: string;
-};
-
 const { href } = Astro.props;
 ---
 
 <a
   href={href}
-  class="relative group w-fit flex pl-7 pr-3 py-1.5 flex-nowrap rounded border border-black/15 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white transition-colors duration-300 ease-in-out"
+  class="back-to-previous-link"
+  aria-label="Go back to previous page"
 >
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    class="absolute top-1/2 left-2 -translate-y-1/2 size-4 stroke-2 fill-none stroke-current"
-  >
-    <line
-      x1="5"
-      y1="12"
-      x2="19"
-      y2="12"
-      class="translate-x-2 group-hover:translate-x-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"
-    ></line>
-    <polyline
-      points="12 5 5 12 12 19"
-      class="translate-x-1 group-hover:translate-x-0 transition-transform duration-300 ease-in-out"
-    ></polyline>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 12H5"/>
+    <path d="M12 19l-7-7 7-7"/>
   </svg>
-  <div class="text-sm">
-    <slot />
-  </div>
+  <slot />
 </a>
+
+<style>
+.back-to-previous-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+  padding: var(--spacing-sm) 0;
+  transition: color 0.2s ease;
+  margin-bottom: var(--spacing-xl);
+}
+
+.back-to-previous-link:hover {
+  color: var(--color-primary);
+}
+
+.back-to-previous-link svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .back-to-previous-link {
+    font-size: var(--font-size-xs);
+    gap: var(--spacing-xs);
+  }
+}
+</style>

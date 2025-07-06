@@ -1,10 +1,11 @@
 ---
 import "@/styles/globals.css";
 
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Container from "@/components/container.astro";
 import PageLayout from "@/layouts/page-layout.astro";
 import Link from "@/components/link.astro";
+// import ResumeDownload from "@/components/resume-download.astro";
 import { dateRange } from "@/lib/utils";
 import { SITE, ABOUT, SOCIALS } from "@/config/site";
 
@@ -18,50 +19,52 @@ const allwork = (await getCollection("work"))
 
 const work = await Promise.all(
   allwork.map(async (item) => {
-    const { Content } = await item.render();
+    const { Content } = await render(item);
     return { ...item, Content };
   })
 );
 ---
 
-<PageLayout title={ABOUT.TITLE} description={ABOUT.DESCRIPTION}>
+<PageLayout title={ABOUT.TITLE} description={ABOUT.DESCRIPTION} type="person">
   <Container>
     <div class="space-y-10">
-      <h1 class="animate font-bold text-primary dark:text-white">
+      <h1 class="font-bold text-primary dark:text-white">
         {ABOUT.TITLE}
       </h1>
       <section>
         <article class="space-y-4">
-          <p class="animate">
+          <p>
             Hi, I'm Sean Burt, a software engineering graduate specializing in
             AI from the University of Victoria. I started my career at
             Hummingbird Drones, where I led the development of the Fire AI
             project, managing the web app, cloud infrastructure, and machine
-            learning components.
+            learning components. I now work at Consumer Genius, where I work 
+            mainly on the data pipelines and data engineering related projects.
           </p>
-          <p class="animate">
-            I have a strong passion for web development, machine learning, and
-            data science, and I thrive in collaborative environments, ensuring
+          <p>
+            I have a strong passion for web development, machine learning, Data
+            Engineering and data science, and I thrive in collaborative environments, ensuring
             everyone's contributions are valued. In my spare time, I enjoy
-            working on personal projects, engaging in Kaggle competitions, and
+            working on personal projects, building out a homelab, and
             taking online courses to expand my knowledge.
           </p>
-          <p class="animate">
+          <p>
             With a focus on continuous learning and innovation, I bring
             dedication and a collaborative spirit to every project. Please take
             a moment to see my work experience below.
           </p>
         </article>
+        <!-- <ResumeDownload /> -->
       </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-primary dark:text-white">
+      <section class="space-y-6">
+        <div class="section-header-container">
+          <h5 class="section-header">
             Work Experience
           </h5>
-          <Link href="/work"> See all work </Link>
+          <Link href="/work" class="section-link"> See all work </Link>
         </div>
-        <ul class="flex flex-col space-y-4">
+        <ul class="flex flex-col space-y-4 list-none">
           {
             work.map((entry) => (
               <li>
@@ -81,8 +84,8 @@ const work = await Promise.all(
         </ul>
       </section>
 
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-primary dark:text-white">
+      <section class="space-y-4">
+        <h5 class="section-header">
           Let's Connect
         </h5>
         <article>
@@ -91,7 +94,7 @@ const work = await Promise.all(
             hi, reach out on social media or send me an email.
           </p>
         </article>
-        <ul class="flex flex-wrap gap-2">
+        <ul class="flex flex-wrap gap-2 list-none">
           {
             SOCIALS.map((SOCIAL) => (
               <li class="flex gap-x-2 text-nowrap">

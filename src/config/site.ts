@@ -19,35 +19,31 @@ export const AUTHOR: Author = {
 };
 
 export const HOME: Metadata = {
-  TITLE: "Software Engineer, Gamer, and Dog Dad",
-  DESCRIPTION: "Personal website of Sean Burt. Software Engineer, Gamer, and Dog Dad.",
+  TITLE: "Software Engineer",
+  DESCRIPTION: "Sean Burt - Software engineer specializing in web development and machine learning.",
 };
 
 export const BLOG: Metadata = {
-  TITLE: "Articles on Software Engineering, Gaming, and Dogs",
-  DESCRIPTION: "A collection of articles on topics I am passionate about.",
+  TITLE: "Writing",
+  DESCRIPTION: "Articles on software engineering and technology.",
 };
 
 export const ABOUT: Metadata = {
-  TITLE: "More information about Sean Burt",
-  DESCRIPTION: "More information about Sean Burt, a Software Engineer, Gamer, and Dog Dad.",
+  TITLE: "About",
+  DESCRIPTION: "Background and experience.",
 };
 
 export const WORK: Metadata = {
-  TITLE: "Professional Experience and Achievements",
-  DESCRIPTION: "Where I have worked and what I have done.",
+  TITLE: "Experience",
+  DESCRIPTION: "Professional work history.",
 };
 
 export const PROJECTS: Metadata = {
-  TITLE: "Projects, Repositories, and Demos",
-  DESCRIPTION: "A collection of my projects, with links to repositories and demos.",
+  TITLE: "Projects",
+  DESCRIPTION: "Software projects and code repositories.",
 };
 
 export const SOCIALS: Socials = [
-  { 
-    NAME: "twitter-x",
-    HREF: "https://www.twitter.com/SeanBurt8",
-  },
   { 
     NAME: "github",
     HREF: "https://www.github.com/SDBurt"

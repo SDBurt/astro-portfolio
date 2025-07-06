@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.sdburt.com/sitemap-index.xml
+
+# Disallow specific paths if needed
+# Disallow: /private/
+# Disallow: /admin/
+
+# Allow search engines to crawl images
+User-agent: Googlebot-Image
+Allow: /
+
+# Optimize crawl rate (optional)
+Crawl-delay: 1

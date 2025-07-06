@@ -1,15 +1,18 @@
 ---
 import "../styles/globals.css";
 import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
-import "@fontsource/lora/400.css";
-import "@fontsource/lora/600.css";
+import "@fontsource/crimson-text/latin-400.css";
+import "@fontsource/crimson-text/latin-600.css";
+import "@fontsource/jetbrains-mono/latin-400.css";
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
+import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
-import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2";
-import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2";
-import { ViewTransitions } from "astro:transitions";
-import PostHog from "./posthog.astro";
+import crimson400 from "@fontsource/crimson-text/files/crimson-text-latin-400-normal.woff2";
+import jetbrains400 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2";
+import { ClientRouter } from "astro:transitions";
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 interface Props {
   title: string;
@@ -25,28 +28,25 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link
-  rel="icon"
-  type="image/svg+xml"
-  href="/favicon.ico"
-  media="(prefers-color-scheme: dark)"
-/>
-<link
-  rel="icon"
-  type="image/svg+xml"
-  href="/favicon.ico"
-  media="(prefers-color-scheme: light)"
-/>
-<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- Favicons -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<link rel="sitemap" href="/sitemap-index.xml" />
 <meta name="generator" content={Astro.generator} />
 <meta name="robots" content="index, follow">
 
 <!-- Font preloads -->
 <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={inter500} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={crimson400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={jetbrains400} as="font" type="font/woff2" crossorigin />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -55,20 +55,41 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="author" content="Sean Burt" />
+<meta name="keywords" content="Sean Burt, Software Engineer, Web Development, Machine Learning, React, Python, Data Engineering, Portfolio" />
+
+<!-- Language and locale -->
+<meta name="language" content="en-US" />
+<meta property="og:locale" content="en_US" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="Sean Burt - Software Engineer" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@sdburt" />
+<meta name="twitter:creator" content="@sdburt" />
+<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL(image, Astro.url)} />
+<meta name="twitter:image:alt" content={title} />
+
+<!-- Additional SEO tags -->
+<meta name="theme-color" content="#3b82f6" />
+<meta name="color-scheme" content="light dark" />
+
+<!-- Preconnect to external domains for performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://vercel.live" crossorigin />
 
 <!-- Security -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -76,8 +97,8 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
 
 
-<ViewTransitions />
-<PostHog />
+<ClientRouter />
+<SpeedInsights />
 
 <script>
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
@@ -94,7 +115,6 @@ const { title, description, image = "/nano.png" } = Astro.props;
   function init() {
     preloadTheme();
     onScroll();
-    animate();
 
     const backToTop = document.getElementById("back-to-top");
     backToTop?.addEventListener("click", (event) => scrollToTop(event));
@@ -102,23 +122,7 @@ const { title, description, image = "/nano.png" } = Astro.props;
     const backToPrev = document.getElementById("back-to-prev");
     backToPrev?.addEventListener("click", () => window.history.back());
 
-    const lightThemeButton = document.getElementById("light-theme-button");
-    lightThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "light");
-      toggleTheme(false);
-    });
-
-    const darkThemeButton = document.getElementById("dark-theme-button");
-    darkThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "dark");
-      toggleTheme(true);
-    });
-
-    const systemThemeButton = document.getElementById("system-theme-button");
-    systemThemeButton?.addEventListener("click", () => {
-      localStorage.setItem("theme", "system");
-      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    });
+    // Theme button handling is now in theme-toggle.astro component
 
     window
       .matchMedia("(prefers-color-scheme: dark)")
@@ -131,15 +135,6 @@ const { title, description, image = "/nano.png" } = Astro.props;
     document.addEventListener("scroll", onScroll);
   }
 
-  function animate() {
-    const animateElements = document.querySelectorAll(".animate");
-
-    animateElements.forEach((element, index) => {
-      setTimeout(() => {
-        element.classList.add("show");
-      }, index * 150);
-    });
-  }
 
   function onScroll() {
     if (window.scrollY > 0) {
@@ -186,7 +181,8 @@ const { title, description, image = "/nano.png" } = Astro.props;
   }
 
   function preloadTheme() {
-    const userTheme = localStorage.theme;
+    const userTheme = localStorage.theme || 'system';
+    document.documentElement.setAttribute('data-theme', userTheme);
 
     if (userTheme === "light" || userTheme === "dark") {
       toggleTheme(userTheme === "dark");

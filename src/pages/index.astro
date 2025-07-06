@@ -4,8 +4,9 @@ import "@/styles/globals.css";
 import { getCollection } from "astro:content";
 import Container from "@/components/container.astro";
 import PageLayout from "@/layouts/page-layout.astro";
-import ArrowCard from "@/components/arrow-card.astro";
+import SimpleLink from "@/components/simple-link.astro";
 import Link from "@/components/link.astro";
+// import ResumeDownload from "@/components/resume-download.astro";
 import { SITE, HOME, SOCIALS } from "@/config/site";
 
 const blog = (await getCollection("blog"))
@@ -21,82 +22,72 @@ const projects = (await getCollection("projects"))
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h1 class="animate font-bold text-primary dark:text-white">
-      {HOME.TITLE} 👋🏻
+    <h1 class="font-bold text-primary dark:text-white">
+      {HOME.TITLE}
     </h1>
     <div class="space-y-16">
       <section>
         <article class="space-y-4">
-          <p class="animate">
-            Welcome to my site! I'm Sean, a software engineer with professional
-            experience in web development and machine learning. I thrive in
-            startup environments, quickly becoming productive and continuously
-            seeking opportunities to learn and grow.
+          <p>
+            Software engineer specializing in <strong>full stack development</strong> and <strong>data engineering</strong>. 
+            I build scalable systems that process data efficiently and create AI-powered solutions 
+            that solve real-world problems.
           </p>
-          <p class="animate">
-            I have worked on various projects, from developing robust ETL
-            processes and integrating third-party services to leading AI-driven
-            initiatives for lead generation and validation. Collaboration is key
-            to my work ethic, and I actively contribute to brainstorming
-            sessions and technical discussions.
-          </p>
-          <p class="animate">
-            Visit my
-            <Link href="https://www.github.com/sdburt" aria-label="Github" external>
-              Github
-            </Link>
-            to see my code and explore my projects.
+          <p>
+            Currently working at <strong>Consumer Genius</strong> on data pipelines and analytics platforms. 
+            Previously led the technical development of <strong>Fire AI</strong> at Hummingbird Drones, an ML platform 
+            that detects wildfires from drone imagery and creates geo-referenced pdf maps.
           </p>
         </article>
+        <!-- <ResumeDownload /> -->
       </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-primary dark:text-white">
+      <section class="space-y-6">
+        <div class="section-header-container">
+          <h5 class="section-header">
             Latest posts
           </h5>
-          <Link href="/blog"> See all posts </Link>
+          <Link href="/blog" class="section-link"> See all posts </Link>
         </div>
-        <ul class="flex flex-col gap-4">
+        <ul class="flex flex-col list-none space-y-4">
           {
             blog.map((post) => (
               <li>
-                <ArrowCard entry={post} />
+                <SimpleLink entry={post} />
               </li>
             ))
           }
         </ul>
       </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-primary dark:text-white">
+      <section class="space-y-6">
+        <div class="section-header-container">
+          <h5 class="section-header">
             Recent projects
           </h5>
-          <Link href="/projects"> See all projects </Link>
+          <Link href="/projects" class="section-link"> See all projects </Link>
         </div>
-        <ul class="flex flex-col gap-4">
+        <ul class="flex flex-col list-none space-y-4">
           {
             projects.map((project) => (
               <li>
-                <ArrowCard entry={project} />
+                <SimpleLink entry={project} />
               </li>
             ))
           }
         </ul>
       </section>
 
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-primary dark:text-white">
-          Let's Connect
+      <section class="space-y-4">
+        <h5 class="section-header">
+          Contact
         </h5>
         <article>
           <p>
-            If you want to get in touch with me about something or just to say
-            hi, reach out on social media or send me an email.
+            Get in touch via email or social media.
           </p>
         </article>
-        <ul class="flex flex-wrap gap-2">
+        <ul class="flex flex-wrap gap-2 list-none">
           {
             SOCIALS.map((SOCIAL) => (
               <li class="flex gap-x-2 text-nowrap">

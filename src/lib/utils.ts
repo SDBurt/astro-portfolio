@@ -1,8 +1,5 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+export function cn(...inputs: (string | undefined | null | false)[]): string {
+  return inputs.filter(Boolean).join(" ");
 }
 
 export function formatDate(date: Date) {
@@ -38,4 +35,3 @@ export function dateRange(startDate: Date, endDate?: Date | string): string {
 
   return `${startMonth}${startYear} - ${endMonth}${endYear}`;
 }
-

@@ -1,0 +1,351 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><!-- Favicons --><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="sitemap" href="/sitemap-index.xml"><meta name="generator" content="Astro v5.11.0"><meta name="robots" content="index, follow"><!-- Font preloads --><link rel="preload" href="/_astro/inter-latin-400-normal.C38fXH4l.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/_astro/inter-latin-500-normal.Cerq10X2.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/_astro/inter-latin-600-normal.LgqL8muc.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/_astro/crimson-text-latin-400-normal.pRLgj_b_.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/_astro/jetbrains-mono-latin-400-normal.V6pRDFza.woff2" as="font" type="font/woff2" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://www.sdburt.com/blog/multi-label-classification/"><!-- Primary Meta Tags --><title>Multi-Label Classification with Pytorch Lightning and Huggingface | SDBurt</title><meta name="title" content="Multi-Label Classification with Pytorch Lightning and Huggingface | SDBurt"><meta name="description" content="Fine-tuning distilbert for multi-label classification of toxic comments"><meta name="author" content="Sean Burt"><meta name="keywords" content="Sean Burt, Software Engineer, Web Development, Machine Learning, React, Python, Data Engineering, Portfolio"><!-- Language and locale --><meta name="language" content="en-US"><meta property="og:locale" content="en_US"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:site_name" content="Sean Burt - Software Engineer"><meta property="og:url" content="https://www.sdburt.com/blog/multi-label-classification/"><meta property="og:title" content="Multi-Label Classification with Pytorch Lightning and Huggingface | SDBurt"><meta property="og:description" content="Fine-tuning distilbert for multi-label classification of toxic comments"><meta property="og:image" content="https://www.sdburt.com/nano.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Multi-Label Classification with Pytorch Lightning and Huggingface | SDBurt"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@sdburt"><meta name="twitter:creator" content="@sdburt"><meta name="twitter:url" content="https://www.sdburt.com/blog/multi-label-classification/"><meta name="twitter:title" content="Multi-Label Classification with Pytorch Lightning and Huggingface | SDBurt"><meta name="twitter:description" content="Fine-tuning distilbert for multi-label classification of toxic comments"><meta name="twitter:image" content="https://www.sdburt.com/nano.png"><meta name="twitter:image:alt" content="Multi-Label Classification with Pytorch Lightning and Huggingface | SDBurt"><!-- Additional SEO tags --><meta name="theme-color" content="#3b82f6"><meta name="color-scheme" content="light dark"><!-- Preconnect to external domains for performance --><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin><link rel="preconnect" href="https://vercel.live" crossorigin><!-- Security --><meta http-equiv="X-Content-Type-Options" content="nosniff"><meta http-equiv="X-Frame-Options" content="DENY"><meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CLDwYp7M.js"></script><vercel-speed-insights data-props="{}" data-params="{&#34;slug&#34;:&#34;multi-label-classification&#34;}" data-pathname="/blog/multi-label-classification/"></vercel-speed-insights> <script type="module" src="/_astro/index.astro_astro_type_script_index_0_lang.CUqFY3xr.js"></script><script type="module">document.addEventListener("astro:before-swap",e=>[...e.newDocument.head.querySelectorAll('link[as="font"]')].forEach(o=>o.remove()));</script><script>
+  function init() {
+    preloadTheme();
+    onScroll();
+
+    const backToTop = document.getElementById("back-to-top");
+    backToTop?.addEventListener("click", (event) => scrollToTop(event));
+
+    const backToPrev = document.getElementById("back-to-prev");
+    backToPrev?.addEventListener("click", () => window.history.back());
+
+    // Theme button handling is now in theme-toggle.astro component
+
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (event) => {
+        if (localStorage.theme === "system") {
+          toggleTheme(event.matches);
+        }
+      });
+
+    document.addEventListener("scroll", onScroll);
+  }
+
+
+  function onScroll() {
+    if (window.scrollY > 0) {
+      document.documentElement.classList.add("scrolled");
+    } else {
+      document.documentElement.classList.remove("scrolled");
+    }
+  }
+
+  function scrollToTop(event) {
+    event.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function toggleTheme(dark) {
+    const css = document.createElement("style");
+
+    css.appendChild(
+      document.createTextNode(
+        `* {
+             -webkit-transition: none !important;
+             -moz-transition: none !important;
+             -o-transition: none !important;
+             -ms-transition: none !important;
+             transition: none !important;
+          }
+        `
+      )
+    );
+
+    document.head.appendChild(css);
+
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    window.getComputedStyle(css).opacity;
+    document.head.removeChild(css);
+  }
+
+  function preloadTheme() {
+    const userTheme = localStorage.theme || 'system';
+    document.documentElement.setAttribute('data-theme', userTheme);
+
+    if (userTheme === "light" || userTheme === "dark") {
+      toggleTheme(userTheme === "dark");
+    } else {
+      toggleTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => init());
+  document.addEventListener("astro:after-swap", () => init());
+  preloadTheme();
+</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Multi-Label Classification with Pytorch Lightning and Huggingface | SDBurt","description":"Fine-tuning distilbert for multi-label classification of toxic comments","url":"https://www.sdburt.com/blog/multi-label-classification/","image":"https://www.sdburt.com/nano.png","author":{"@type":"Person","name":"Sean Burt","url":"https://www.sdburt.com/","jobTitle":"Software Engineer","worksFor":{"@type":"Organization","name":"Consumer Genius"}},"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.sdburt.com//blog?q={search_term_string}"},"query-input":"required name=search_term_string"}}</script><link rel="stylesheet" href="/_astro/index.D5gsgmzi.css"><script type="module" src="/_astro/page.BNYwb576.js"></script></head> <body class="font-sans antialiased flex flex-col bg-background dark:bg-background/75 text-foreground dark:text-foreground/75"> <a href="#main-content" class="skip-to-content" data-astro-cid-2qp3bklx>
+Skip to main content
+</a>  <header class="fixed top-0 left-0 right-0 z-50 py-5 bg-background/75 dark:bg-background/25 backdrop-blur-sm saturate-200"> <div class="container relative">  <div class="flex flex-wrap gap-y-2 justify-between"> <a href="/" target="_self" class="text-primary hover:text-foreground">  <div class="font-semibold"> SDBurt </div>  </a> <nav class="flex gap-1"> <a href="/" target="_self" class="text-primary hover:text-foreground underline underline-offset-4">  home  </a> <span> / </span> <a href="/work" target="_self" class="text-primary hover:text-foreground underline underline-offset-4">  work  </a> <span> / </span> <a href="/projects" target="_self" class="text-primary hover:text-foreground underline underline-offset-4">  projects  </a> <span> / </span> <a href="/blog" target="_self" class="text-primary hover:text-foreground underline underline-offset-4">  blog  </a> <span> / </span> <a href="/about" target="_self" class="text-primary hover:text-foreground underline underline-offset-4">  about  </a> </nav> </div>  </div> </header> <main id="main-content" class="flex-1 py-32">  <div class="container relative">  <div> <a href="/blog" class="text-sm text-muted-foreground hover:text-primary transition-colors py-2 inline-block">
+←  Back to blog  </a> </div> <div class="space-y-1 my-10"> <div class="flex items-center gap-1.5"> <div class="font-base text-sm"> <time datetime="2023-03-01T00:00:00.000Z"> Feb 28, 2023 </time> </div>
+&bull;
+<div class="font-base text-sm"> 6 min read </div> </div> <h1 class="text-2xl font-semibold text-primary dark:text-white"> Multi-Label Classification with Pytorch Lightning and Huggingface </h1> </div> <article class="flex flex-col w-full"> <p>This post covers fine-tuning distilbert for multi-label classification of comments. The dataset I used can be found on <a href="https://kaggle.com/datasets/julian3833/jigsaw-toxic-comment-classification-challenge">kaggle</a>. The labels seen in this dataset are: <code>toxic</code>, <code>severe_toxic</code>, <code>obscene</code>, <code>threat</code>, <code>insult</code>, and <code>identity_hate</code>.</p>
+<p>The code for this was inspired by this <a href="https://github.com/rasbt/deeplearning-models/blob/master/pytorch-lightning_ipynb/transformer/distilbert-finetuning-ii.ipynb">notebook</a> by Sebastian Raschka <a href="https://twitter.com/rasbt">@rasbt</a>. It uses <code>Lightning</code> with <code>Pytorch</code>, and utilizes <code>Huggingface Transformers</code> to load the base model and tokenizer for <code>distilbert-base-uncased</code></p>
+<h2 id="notes"><a class="anchor-link" aria-hidden tabindex="-1" href="#notes">Notes</a></h2>
+<p>The following sections talk a bit about some of the additional things you need to change in Sebastian’s notebook to make this work. The following code is not perfect, but it worked pretty well and got decent results with little to no pre-processing of the comments.</p>
+<h3 id="tokenizer"><a class="anchor-link" aria-hidden tabindex="-1" href="#tokenizer">Tokenizer</a></h3>
+<ul>
+<li>Make sure the input are strings, not <code>null</code> or <code>NaN</code>
+<ul>
+<li>Otherwise you will get an error, show below, which is returned when you have something that cannot be tokenized in the input.</li>
+<li>I used <code>df["text"] = df["text"].str.lower()</code> on the column, which was enough to fix this issue.</li>
+</ul>
+</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="plaintext"><code><span class="line"><span>ValueError: TextEncodeInput must be Union[TextInputSequence, Tuple[InputSequence, InputSequence]]</span></span></code></pre>
+<p>Additionally, I have the <code>is_split_into_words</code> flag set to <code>True</code> when loading the tokenizer from the pretrained model.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">tokenizer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoTokenizer.from_pretrained(</span><span style="color:#9ECBFF">"distilbert-base-uncased"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">is_split_into_words</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<h3 id="model"><a class="anchor-link" aria-hidden tabindex="-1" href="#model">Model</a></h3>
+<p>When using <code>AutoModelForSequenceClassification.from_pretrained()</code> for multi-label classification, the <code>problem_type</code> needs to be set to <code>multi_label_classification</code>. This solution was discovered through <a href="https://alexanderjunge.net/blog/til-multi-label-automodelforsequenceclassification/">alexander’s post</a> after looking through the official documentation for multi-label classification. The official documentation was not updated for <a href="https://github.com/huggingface/transformers/pull/14180">this pr</a> This changes the loss function to <code>BCEWithLogitsLoss()</code> from <code>CrossEntropyLoss()</code> or <code>MSELoss()</code> (depending on the problem type).</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoModelForSequenceClassification.from_pretrained(</span></span>
+<span class="line"><span style="color:#9ECBFF">	"distilbert-base-uncased"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">	num_labels</span><span style="color:#F97583">=</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">	problem_type</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"multi_label_classification"</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<ul>
+<li>Additionally, you will need to add the number of labels as a property of the <code>LightningModule</code>.</li>
+</ul>
+<h3 id="metrics"><a class="anchor-link" aria-hidden tabindex="-1" href="#metrics">Metrics</a></h3>
+<p>If you are using torchmetrics for accuracy like I did, you will need to either add <code>task=multilabel</code> to the accuracy method, or import <code>MultilabelAccuracy</code> directly and set <code>num_labels</code> to the desired number (6, for my problem).</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.val_acc </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> MultilabelAccuracy(</span><span style="color:#FFAB70">num_labels</span><span style="color:#F97583">=</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.test_acc </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> MultilabelAccuracy(</span><span style="color:#FFAB70">num_labels</span><span style="color:#F97583">=</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<h2 id="code"><a class="anchor-link" aria-hidden tabindex="-1" href="#code">Code</a></h2>
+<p>The following show the code I used to finetune the model for multi-label sequence classification</p>
+<h3 id="imports"><a class="anchor-link" aria-hidden tabindex="-1" href="#imports">Imports</a></h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> os</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> random</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## pathing</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> pathlib </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Path</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## For data manipulation</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> numpy </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> np</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pandas </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> pd</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Pytorch Imports</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch.nn </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> nn</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> torch.nn.functional </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> F</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> torch.utils.data </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Dataset, DataLoader</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Lighting Imports</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pytorch_lightning </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> pt</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> pytorch_lightning.callbacks </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> ModelCheckpoint</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> pytorch_lightning.trainer </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Trainer</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> pytorch_lightning.core </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> LightningModule</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Finetune scheduler</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> finetuning_scheduler </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> FinetuningScheduler</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Torchmetrics</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> torchmetrics.classification </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> MultilabelAccuracy</span></span></code></pre>
+<h3 id="tokenizer-1"><a class="anchor-link" aria-hidden tabindex="-1" href="#tokenizer-1">Tokenizer</a></h3>
+<p>Define the tokenizer. Notice that the defined the <code>problem_type</code> flag in <code>from_pretrained</code></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> AutoModelForSequenceClassification.from_pretrained(</span></span>
+<span class="line"><span style="color:#9ECBFF">    "distilbert-base-uncased"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    num_labels</span><span style="color:#F97583">=</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    problem_type</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"multi_label_classification"</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<h3 id="dataset-class"><a class="anchor-link" aria-hidden tabindex="-1" href="#dataset-class">Dataset Class</a></h3>
+<p>Define the dataset using the following code.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> JigsawDataset</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">Dataset</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, dataset_dict, partition_key</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"train"</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.partition </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> dataset_dict[partition_key]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __getitem__</span><span style="color:#E1E4E8">(self, index):</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.partition[index]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __len__</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.partition.num_rows</span></span></code></pre>
+<h3 id="lightning-model"><a class="anchor-link" aria-hidden tabindex="-1" href="#lightning-model">Lightning Model</a></h3>
+<p>This has 6 labels and shows some of the gotchas mentioned above regarding the <code>MultilabelAccuracy</code> metrics, and the <code>self.num_labels</code> property</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> LightningModel</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">LightningModule</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, model, learning_rate</span><span style="color:#F97583">=</span><span style="color:#79B8FF">5e-5</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#79B8FF">        super</span><span style="color:#E1E4E8">().</span><span style="color:#79B8FF">__init__</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">       </span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.num_labels </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 6</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.learning_rate </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> learning_rate</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> model</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.val_acc </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> MultilabelAccuracy(</span><span style="color:#FFAB70">num_labels</span><span style="color:#F97583">=</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.test_acc </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> MultilabelAccuracy(</span><span style="color:#FFAB70">num_labels</span><span style="color:#F97583">=</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> forward</span><span style="color:#E1E4E8">(self, input_ids, attention_mask, labels):</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.model(input_ids, </span><span style="color:#FFAB70">attention_mask</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">attention_mask, </span><span style="color:#FFAB70">labels</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">labels)</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> training_step</span><span style="color:#E1E4E8">(self, batch, batch_idx):</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_toxic </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"toxic"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_severe_toxic </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"severe_toxic"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_obscene </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"obscene"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_threat </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"threat"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_insult </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"insult"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_identity_hate </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"identity_hate"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        labels </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.stack((label_toxic, label_severe_toxic, label_obscene, label_threat, label_insult, label_identity_hate), </span><span style="color:#FFAB70">axis</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">).to(torch.float32)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        ids </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"input_ids"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        mask </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"attention_mask"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        outputs </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">(ids, </span><span style="color:#FFAB70">attention_mask</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">mask, </span><span style="color:#FFAB70">labels</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">labels)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.log(</span><span style="color:#9ECBFF">"train_loss"</span><span style="color:#E1E4E8">, outputs[</span><span style="color:#9ECBFF">"loss"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> outputs[</span><span style="color:#9ECBFF">"loss"</span><span style="color:#E1E4E8">]  </span><span style="color:#6A737D">## this is passed to the optimizer for training</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> validation_step</span><span style="color:#E1E4E8">(self, batch, batch_idx):</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_toxic </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"toxic"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_severe_toxic </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"severe_toxic"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_obscene </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"obscene"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_threat </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"threat"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_insult </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"insult"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_identity_hate </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"identity_hate"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        labels </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.stack((label_toxic, label_severe_toxic, label_obscene, label_threat, label_insult, label_identity_hate), </span><span style="color:#FFAB70">axis</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">).to(torch.float32)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        ids </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"input_ids"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        mask </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"attention_mask"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        outputs </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">(ids, </span><span style="color:#FFAB70">attention_mask</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">mask, </span><span style="color:#FFAB70">labels</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">labels)    </span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.log(</span><span style="color:#9ECBFF">"val_loss"</span><span style="color:#E1E4E8">, outputs[</span><span style="color:#9ECBFF">"loss"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">prog_bar</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        logits </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> outputs[</span><span style="color:#9ECBFF">"logits"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.val_acc(logits, labels)</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.log(</span><span style="color:#9ECBFF">"val_acc"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.val_acc, </span><span style="color:#FFAB70">prog_bar</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> test_step</span><span style="color:#E1E4E8">(self, batch, batch_idx):</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_toxic </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"toxic"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_severe_toxic </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"severe_toxic"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_obscene </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"obscene"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_threat </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"threat"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_insult </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"insult"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        label_identity_hate </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"identity_hate"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        labels </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.stack((label_toxic, label_severe_toxic, label_obscene, label_threat, label_insult, label_identity_hate), </span><span style="color:#FFAB70">axis</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">).to(torch.float32)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">        ids </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"input_ids"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        mask </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> batch[</span><span style="color:#9ECBFF">"attention_mask"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        outputs </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">(ids, </span><span style="color:#FFAB70">attention_mask</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">mask, </span><span style="color:#FFAB70">labels</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">labels)      </span></span>
+<span class="line"><span style="color:#E1E4E8">        logits </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> outputs[</span><span style="color:#9ECBFF">"logits"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">       </span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.test_acc(logits, labels)</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.log(</span><span style="color:#9ECBFF">"accuracy"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.test_acc, </span><span style="color:#FFAB70">prog_bar</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">       </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> configure_optimizers</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#E1E4E8">        optimizer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> torch.optim.Adam(</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.parameters(), </span><span style="color:#FFAB70">lr</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.learning_rate)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> optimizer</span></span>
+<span class="line"></span></code></pre>
+<h3 id="prepare-the-data"><a class="anchor-link" aria-hidden tabindex="-1" href="#prepare-the-data">Prepare the Data</a></h3>
+<p>Open the kaggle dataset <code>train.csv</code> file and perform some steps to prepare it for our model.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D">## Define a variable to store the input and temp output path</span></span>
+<span class="line"><span style="color:#E1E4E8">input_path </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Path(</span><span style="color:#9ECBFF">"input/"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">output_path </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Path(</span><span style="color:#9ECBFF">"output/"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Read the train csv file, rename the comment_text column, and make sure</span></span>
+<span class="line"><span style="color:#6A737D">## the column is a lowercase string</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.read_csv(input_path </span><span style="color:#F97583">/</span><span style="color:#9ECBFF"> "train.csv"</span><span style="color:#E1E4E8">).dropna()</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df.rename(</span><span style="color:#FFAB70">columns</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"comment_text"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">})</span></span>
+<span class="line"><span style="color:#E1E4E8">df[</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df[</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">].str.lower()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Drop the ID field since we don't need it</span></span>
+<span class="line"><span style="color:#E1E4E8">df.drop(</span><span style="color:#FFAB70">columns</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"id"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">inplace</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Shuffle the dataframe and split the data into train, validation, and test</span></span>
+<span class="line"><span style="color:#E1E4E8">df_shuffled </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df.sample(</span><span style="color:#FFAB70">frac</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">random_state</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">).reset_index()</span></span>
+<span class="line"><span style="color:#E1E4E8">df_train </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df_shuffled.iloc[:</span><span style="color:#79B8FF">100_000</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">df_val </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df_shuffled.iloc[</span><span style="color:#79B8FF">100_000</span><span style="color:#E1E4E8">:</span><span style="color:#79B8FF">140_000</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">df_test </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df_shuffled.iloc[</span><span style="color:#79B8FF">140_000</span><span style="color:#E1E4E8">:]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Save the new shuffled data into csv files to be opened later</span></span>
+<span class="line"><span style="color:#E1E4E8">df_train.to_csv(output_path </span><span style="color:#F97583">/</span><span style="color:#9ECBFF"> "train.csv"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">encoding</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"utf-8"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">df_val.to_csv(output_path </span><span style="color:#F97583">/</span><span style="color:#9ECBFF"> "validation.csv"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">encoding</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"utf-8"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">df_test.to_csv(output_path </span><span style="color:#F97583">/</span><span style="color:#9ECBFF"> "test.csv"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">encoding</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"utf-8"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<h3 id="load-the-dataset"><a class="anchor-link" aria-hidden tabindex="-1" href="#load-the-dataset">Load the Dataset</a></h3>
+<p>Define the dataset using <code>load_data</code> from <code>Dataset</code></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> torch.utils.data </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Dataset, DataLoader</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">jigsaw_dataset </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> load_dataset(</span></span>
+<span class="line"><span style="color:#9ECBFF">    "csv"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    data_files</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">        "train"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">(output_path </span><span style="color:#F97583">/</span><span style="color:#9ECBFF"> "train.csv"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#9ECBFF">        "validation"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">(output_path </span><span style="color:#F97583">/</span><span style="color:#9ECBFF"> "validation.csv"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#9ECBFF">        "test"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">str</span><span style="color:#E1E4E8">(output_path </span><span style="color:#F97583">/</span><span style="color:#9ECBFF"> "test.csv"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<h3 id="tokenize-the-inputs"><a class="anchor-link" aria-hidden tabindex="-1" href="#tokenize-the-inputs">Tokenize the inputs</a></h3>
+<p>Tokenize the input text</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> tokenize_text</span><span style="color:#E1E4E8">(batch):</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> tokenizer(</span></span>
+<span class="line"><span style="color:#E1E4E8">        batch[</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#FFAB70">        truncation</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">        padding</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">jigsaw_tokenized </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> jigsaw_dataset.map(tokenize_text, </span><span style="color:#FFAB70">batched</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">batch_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">jigsaw_tokenized.set_format(</span><span style="color:#9ECBFF">"torch"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">columns</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">"input_ids"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"attention_mask"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"toxic"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"severe_toxic"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"obscene"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"threat"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"insult"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"identity_hate"</span><span style="color:#E1E4E8">])</span></span></code></pre>
+<h3 id="create-the-dataloaders"><a class="anchor-link" aria-hidden tabindex="-1" href="#create-the-dataloaders">Create the Dataloaders</a></h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D">## Create the datasets</span></span>
+<span class="line"><span style="color:#E1E4E8">train_dataset </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> JigsawDataset(jigsaw_tokenized, </span><span style="color:#FFAB70">partition_key</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"train"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">val_dataset </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> JigsawDataset(jigsaw_tokenized, </span><span style="color:#FFAB70">partition_key</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"validation"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">test_dataset </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> JigsawDataset(jigsaw_tokenized, </span><span style="color:#FFAB70">partition_key</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"test"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">## Create the dataloaders</span></span>
+<span class="line"><span style="color:#E1E4E8">train_loader </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> DataLoader(</span></span>
+<span class="line"><span style="color:#FFAB70">    dataset</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">train_dataset,</span></span>
+<span class="line"><span style="color:#FFAB70">    batch_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    shuffle</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    num_workers</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">val_loader </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> DataLoader(</span></span>
+<span class="line"><span style="color:#FFAB70">    dataset</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">val_dataset,</span></span>
+<span class="line"><span style="color:#FFAB70">    batch_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    num_workers</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">test_loader </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> DataLoader(</span></span>
+<span class="line"><span style="color:#FFAB70">    dataset</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">test_dataset,</span></span>
+<span class="line"><span style="color:#FFAB70">    batch_size</span><span style="color:#F97583">=</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    num_workers</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">lightning_model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> LightningModel(model)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">callbacks </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">    ModelCheckpoint(</span><span style="color:#FFAB70">save_top_k</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">mode</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"max"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">monitor</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"val_acc"</span><span style="color:#E1E4E8">),  </span><span style="color:#6A737D">## save top 1 model</span></span>
+<span class="line"><span style="color:#E1E4E8">    FinetuningScheduler()</span></span>
+<span class="line"><span style="color:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">trainer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Trainer(</span></span>
+<span class="line"><span style="color:#FFAB70">    max_epochs</span><span style="color:#F97583">=</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    callbacks</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">callbacks,</span></span>
+<span class="line"><span style="color:#FFAB70">    accelerator</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"gpu"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    devices</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#FFAB70">    log_every_n_steps</span><span style="color:#F97583">=</span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    precision</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"16"</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">trainer.fit(</span></span>
+<span class="line"><span style="color:#FFAB70">    model</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">lightning_model,</span></span>
+<span class="line"><span style="color:#FFAB70">    train_dataloaders</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">train_loader,</span></span>
+<span class="line"><span style="color:#FFAB70">    val_dataloaders</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">val_loader</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D">## Test the train, val, and test loaders</span></span>
+<span class="line"><span style="color:#E1E4E8">trainer.test(lightning_model, </span><span style="color:#FFAB70">dataloaders</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">train_loader, </span><span style="color:#FFAB70">ckpt_path</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"best"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">trainer.test(lightning_model, </span><span style="color:#FFAB70">dataloaders</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">val_loader, </span><span style="color:#FFAB70">ckpt_path</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"best"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">trainer.test(lightning_model, </span><span style="color:#FFAB70">dataloaders</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">test_loader, </span><span style="color:#FFAB70">ckpt_path</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"best"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<h2 id="results"><a class="anchor-link" aria-hidden tabindex="-1" href="#results">Results</a></h2>
+<p>This outputs the following results</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">[{</span><span style="color:#9ECBFF">'accuracy'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.9737749695777893</span><span style="color:#E1E4E8">}]</span></span>
+<span class="line"><span style="color:#E1E4E8">[{</span><span style="color:#9ECBFF">'accuracy'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.9733250141143799</span><span style="color:#E1E4E8">}]</span></span>
+<span class="line"><span style="color:#E1E4E8">[{</span><span style="color:#9ECBFF">'accuracy'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.974358320236206</span><span style="color:#E1E4E8">}]</span></span></code></pre>
+<p>Not great, but not bad either</p> </article>  </div>  </main> <footer class="py-5 text-sm"> <div class="container relative">  <div class="flex justify-between items-center"> <div>
+&copy; 2024 | SDBurt </div> <div class="flex items-center gap-4"> <button id="back-to-top" class="text-sm text-muted-foreground hover:text-primary transition-colors py-2">
+↑ Back to top
+</button> <button id="theme-toggle" aria-label="Toggle theme" class="theme-toggle-button" type="button" data-astro-cid-xr2nj7un> <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-xr2nj7un> <circle cx="12" cy="12" r="5" data-astro-cid-xr2nj7un></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-xr2nj7un></line> <line x1="12" y1="21" x2="12" y2="23" data-astro-cid-xr2nj7un></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-xr2nj7un></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-xr2nj7un></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-xr2nj7un></line> <line x1="21" y1="12" x2="23" y2="12" data-astro-cid-xr2nj7un></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-xr2nj7un></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-xr2nj7un></line> </svg> <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-xr2nj7un> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-xr2nj7un></path> </svg> <svg class="system-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-xr2nj7un> <rect x="2" y="3" width="20" height="14" rx="2" ry="2" data-astro-cid-xr2nj7un></rect> <line x1="8" y1="21" x2="16" y2="21" data-astro-cid-xr2nj7un></line> <line x1="12" y1="17" x2="12" y2="21" data-astro-cid-xr2nj7un></line> </svg> </button>  <script type="module">function o(){const s=document.getElementById("theme-toggle");if(!s)return;const n=["light","dark","system"];function m(e){const t=n.indexOf(e);return n[(t+1)%n.length]}function c(e){if(document.documentElement.setAttribute("data-theme",e),e==="system"){const t=window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",t)}else document.documentElement.classList.toggle("dark",e==="dark");localStorage.setItem("theme",e)}s.addEventListener("click",()=>{const e=localStorage.getItem("theme")||"system",t=m(e);c(t)}),window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",e=>{(localStorage.getItem("theme")||"system")==="system"&&document.documentElement.classList.toggle("dark",e.matches)})}document.addEventListener("DOMContentLoaded",o);document.addEventListener("astro:after-swap",o);</script> </div> </div>  </div> </footer> </body></html>

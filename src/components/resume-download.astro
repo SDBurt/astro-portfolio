@@ -1,0 +1,58 @@
+---
+// Resume download component
+---
+
+<div class="resume-download">
+  <a 
+    href="/sean-burt-resume.pdf" 
+    download="Sean-Burt-Resume.pdf"
+    class="resume-link"
+    aria-label="Download Sean Burt's resume as PDF"
+  >
+    <svg class="resume-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7,10 12,15 17,10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Download Resume (PDF)
+  </a>
+</div>
+
+<style>
+.resume-download {
+  margin-top: 1.5rem;
+}
+
+.resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-3xl) 1.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+  border: 2px solid var(--color-primary);
+}
+
+.resume-link:hover {
+  background-color: transparent;
+  color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.resume-icon {
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .resume-link {
+    padding: var(--spacing-sm) var(--spacing-xl);
+    font-size: var(--font-size-xs);
+  }
+}
+</style>

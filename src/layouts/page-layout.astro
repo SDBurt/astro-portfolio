@@ -2,14 +2,29 @@
 import Head from "@/components/page-head.astro";
 import Header from "@/components/header.astro";
 import Footer from "@/components/page-footer.astro";
+import SkipToContent from "@/components/skip-to-content.astro";
+import StructuredData from "@/components/structured-data.astro";
 import { SITE, SEPARATOR } from "@/config/site";
 
 type Props = {
   title: string;
   description: string;
+  type?: "website" | "article" | "person" | "portfolio";
+  image?: string;
+  datePublished?: Date;
+  dateModified?: Date;
+  tags?: string[];
 };
 
-const { title, description } = Astro.props;
+const { 
+  title, 
+  description, 
+  type = "website",
+  image,
+  datePublished,
+  dateModified,
+  tags
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -18,13 +33,24 @@ const { title, description } = Astro.props;
     <Head
       title={`${title} ${SEPARATOR} ${SITE.NAME}`}
       description={description}
+      image={image}
+    />
+    <StructuredData
+      type={type}
+      title={`${title} ${SEPARATOR} ${SITE.NAME}`}
+      description={description}
+      image={image}
+      datePublished={datePublished}
+      dateModified={dateModified}
+      tags={tags}
     />
   </head>
   <body
     class="font-sans antialiased flex flex-col bg-background dark:bg-background/75 text-foreground dark:text-foreground/75"
   >
+    <SkipToContent />
     <Header />
-    <main class="flex-1 py-32">
+    <main id="main-content" class="flex-1 py-32">
       <slot />
     </main>
     <Footer />

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import PageLayout from "@/layouts/page-layout.astro";
 import Container from "@/components/container.astro";
 import { dateRange } from "@/lib/utils";
@@ -12,7 +12,7 @@ const collection = (await getCollection("work")).sort(
 
 const work = await Promise.all(
   collection.map(async (item) => {
-    const { Content } = await item.render();
+    const { Content } = await render(item);
     return { ...item, Content };
   })
 );
@@ -21,13 +21,13 @@ const work = await Promise.all(
 <PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
   <Container>
     <div class="space-y-10">
-      <h1 class="animate font-bold text-primary dark:text-white">
+      <h1 class="font-bold text-primary dark:text-white">
         {WORK.TITLE}
       </h1>
-      <ul class="flex flex-col space-y-4">
+      <ul class="flex flex-col space-y-4 list-none">
         {
           work.map((entry) => (
-            <li class="animate">
+            <li>
               <div class="text-sm opacity-75">
                 {dateRange(entry.data.dateStart, entry.data.dateEnd)}
               </div>
@@ -43,7 +43,7 @@ const work = await Promise.all(
         }
       </ul>
       <!-- 
-      <ul class="animate flex flex-col gap-4">
+      <ul class="flex flex-col gap-4">
 
       </ul> -->
     </div>

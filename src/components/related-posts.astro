@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import SimpleLink from './simple-link.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+
+if (posts.length === 0) return;
+---
+
+<section class="mt-12 pt-8 border-t border-border">
+  <h3 class="section-header mb-6">Related Posts</h3>
+  <ul class="flex flex-col list-none space-y-4">
+    {posts.map((post) => (
+      <li>
+        <SimpleLink entry={post} />
+      </li>
+    ))}
+  </ul>
+</section>
