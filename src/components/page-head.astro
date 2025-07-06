@@ -45,9 +45,9 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={inter500} as="font" type="font/woff2" crossorigin />
 <!-- Other fonts loaded on demand -->
-<link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={crimson400} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={jetbrains400} as="font" type="font/woff2" crossorigin />
+<link href={inter600} as="font" type="font/woff2" crossorigin />
+<link href={crimson400} as="font" type="font/woff2" crossorigin />
+<link href={jetbrains400} as="font" type="font/woff2" crossorigin />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -207,4 +207,16 @@ const { title, description, image = "/nano.png" } = Astro.props;
 
   document.addEventListener("DOMContentLoaded", () => init());
   document.addEventListener("astro:after-swap", () => init());
+</script>
+
+<!-- Critical: Apply theme immediately after all CSS is defined -->
+<script is:inline>
+  (function() {
+    const theme = localStorage.getItem('theme') || 'system';
+    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', theme);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+  })();
 </script>

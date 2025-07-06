@@ -23,34 +23,6 @@ const { title, description, type = "website", image, datePublished, dateModified
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Critical: Prevent FOUC by setting theme immediately -->
-    <script>
-      (function() {
-        const theme = localStorage.getItem('theme') || 'system';
-        const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        document.documentElement.setAttribute('data-theme', theme);
-        if (isDark) {
-          document.documentElement.classList.add('dark');
-        }
-      })();
-    </script>
-    
-    <!-- Critical CSS variables to prevent color flash -->
-    <style>
-      :root {
-        --color-background: hsl(0, 0%, 100%);
-        --color-foreground: hsl(20, 14.3%, 4.1%);
-      }
-      .dark {
-        --color-background: hsl(20, 14.3%, 4.1%);
-        --color-foreground: hsl(60, 9.1%, 97.8%);
-      }
-      html, body {
-        background-color: var(--color-background);
-        color: var(--color-foreground);
-        transition: none !important;
-      }
-    </style>
     <Head
       title={`${title} ${SEPARATOR} ${SITE.NAME}`}
       description={description}
