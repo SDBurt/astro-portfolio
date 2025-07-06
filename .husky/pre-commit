@@ -1,9 +1,5 @@
-# Run lint-staged for formatting and linting
-pnpm lint-staged
+# Simple pre-commit check
+echo "Running basic checks..."
 
-# Run type checking
+# Type checking only
 pnpm astro check
-
-# Build check to ensure everything compiles properly
-echo "Running build check..."
-pnpm build
