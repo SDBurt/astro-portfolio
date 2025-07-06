@@ -29,6 +29,49 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
+<!-- Critical: Prevent FOUC by hiding content until theme is applied -->
+<style>
+  /* Hide body until theme is loaded to prevent FOUC */
+  html:not([data-theme]) body {
+    visibility: hidden;
+    opacity: 0;
+  }
+  
+  /* Critical theme variables for immediate rendering */
+  html {
+    --color-background: hsl(0, 0%, 100%);
+    --color-foreground: hsl(20, 14.3%, 4.1%);
+  }
+  
+  html.dark {
+    --color-background: hsl(20, 14.3%, 4.1%);
+    --color-foreground: hsl(60, 9.1%, 97.8%);
+  }
+  
+  /* Show content once theme is set */
+  html[data-theme] body {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Ensure smooth transition when revealing content */
+  body {
+    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out;
+  }
+</style>
+
+<!-- Apply theme immediately to prevent FOUC -->
+<script is:inline>
+  (function() {
+    const theme = localStorage.getItem('theme') || 'system';
+    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', theme);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+  })();
+</script>
+
 <!-- Favicons -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -45,9 +88,9 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={inter500} as="font" type="font/woff2" crossorigin />
 <!-- Other fonts loaded on demand -->
-<link href={inter600} as="font" type="font/woff2" crossorigin />
-<link href={crimson400} as="font" type="font/woff2" crossorigin />
-<link href={jetbrains400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={crimson400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={jetbrains400} as="font" type="font/woff2" crossorigin />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -209,14 +252,3 @@ const { title, description, image = "/nano.png" } = Astro.props;
   document.addEventListener("astro:after-swap", () => init());
 </script>
 
-<!-- Critical: Apply theme immediately after all CSS is defined -->
-<script is:inline>
-  (function() {
-    const theme = localStorage.getItem('theme') || 'system';
-    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.setAttribute('data-theme', theme);
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    }
-  })();
-</script>
