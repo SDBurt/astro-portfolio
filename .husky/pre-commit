@@ -1,12 +1,8 @@
 # Pre-commit validation
 echo "Validating code before commit..."
 
-# Type checking
-echo "→ Running type check..."
-pnpm astro check
-
-# Build verification
-echo "→ Building project..."
+# Type checking & Build verification
+echo "→ Running Check and Building project..."
 pnpm build
 
 echo "✅ All checks passed!"
