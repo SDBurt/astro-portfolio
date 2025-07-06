@@ -13,8 +13,7 @@
     "security:audit": "pnpm audit --audit-level moderate",
     "security:outdated": "pnpm outdated",
     "security:update": "pnpm update --latest",
-    "prepare": "husky",
-    "pre-commit": "lint-staged"
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -49,10 +48,5 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "typescript": "^5.8.3"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,astro}": [
-      "biome format --write"
-    ]
   }
 }

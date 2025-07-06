@@ -1,8 +1,12 @@
-# Pre-commit checks
-echo "Running pre-commit checks..."
-
-# Format code
-pnpm lint-staged
+# Pre-commit validation
+echo "Validating code before commit..."
 
 # Type checking
+echo "→ Running type check..."
 pnpm astro check
+
+# Build verification
+echo "→ Building project..."
+pnpm build
+
+echo "✅ All checks passed!"
