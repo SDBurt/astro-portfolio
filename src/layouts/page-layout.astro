@@ -32,16 +32,24 @@ const { title, description, type = "website", image, datePublished, dateModified
         if (isDark) {
           document.documentElement.classList.add('dark');
         }
-        // Set body visibility to prevent flash
-        document.documentElement.style.visibility = 'visible';
       })();
     </script>
     
-    <!-- Critical CSS to prevent layout shift -->
+    <!-- Critical CSS variables to prevent color flash -->
     <style>
-      html { visibility: hidden; }
-      html.dark { visibility: visible; }
-      html:not(.dark) { visibility: visible; }
+      :root {
+        --color-background: hsl(0, 0%, 100%);
+        --color-foreground: hsl(20, 14.3%, 4.1%);
+      }
+      .dark {
+        --color-background: hsl(20, 14.3%, 4.1%);
+        --color-foreground: hsl(60, 9.1%, 97.8%);
+      }
+      html, body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+        transition: none !important;
+      }
     </style>
     <Head
       title={`${title} ${SEPARATOR} ${SITE.NAME}`}
