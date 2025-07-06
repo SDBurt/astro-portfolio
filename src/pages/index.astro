@@ -6,7 +6,6 @@ import Container from "@/components/container.astro";
 import PageLayout from "@/layouts/page-layout.astro";
 import SimpleLink from "@/components/simple-link.astro";
 import Link from "@/components/link.astro";
-// import ResumeDownload from "@/components/resume-download.astro";
 import { SITE, HOME, SOCIALS } from "@/config/site";
 
 const blog = (await getCollection("blog"))
@@ -39,7 +38,6 @@ const projects = (await getCollection("projects"))
             that detects wildfires from drone imagery and creates geo-referenced pdf maps.
           </p>
         </article>
-        <!-- <ResumeDownload /> -->
       </section>
 
       <section class="space-y-6">
