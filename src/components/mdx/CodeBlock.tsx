@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 
 interface CodeBlockProps {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ interface CodeBlockProps {
   showLineNumbers?: boolean;
 }
 
-const CodeBlock = ({ children, title, language, showLineNumbers = false }: CodeBlockProps) => {
+const CodeBlock = ({ children, title, language }: CodeBlockProps) => {
   return (
     <div
       style={{

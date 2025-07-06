@@ -1,0 +1,22 @@
+Contact: mailto:seandburt@gmail.com
+Expires: 2025-12-31T23:59:59Z
+Preferred-Languages: en
+Canonical: https://www.sdburt.com/.well-known/security.txt
+Policy: https://www.sdburt.com/security-policy
+Acknowledgments: https://www.sdburt.com/security-acknowledgments
+
+# Security Disclosure
+# This is a personal portfolio website with no sensitive data or user accounts.
+# If you find a security issue, please report it responsibly.
+# 
+# Scope:
+# - Cross-site scripting (XSS)
+# - Content injection attacks
+# - Security header bypasses
+# - Information disclosure
+#
+# Out of scope:
+# - Social engineering
+# - Physical attacks
+# - Denial of service (DoS)
+# - Brute force attacks on non-existent login systems

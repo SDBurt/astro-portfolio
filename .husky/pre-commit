@@ -1,0 +1,9 @@
+# Run lint-staged for formatting and linting
+pnpm lint-staged
+
+# Run type checking
+pnpm astro check
+
+# Build check to ensure everything compiles properly
+echo "Running build check..."
+pnpm build

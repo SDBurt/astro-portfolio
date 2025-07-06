@@ -3,13 +3,14 @@
   "files": {
     "ignoreUnknown": true,
     "includes": [
-      "**",
+      "**/*.{js,jsx,ts,tsx,astro,md,mdx}",
       "!**/node_modules/**/*",
       "!**/*.config.*",
-      "!**/*.json",
       "!**/tsconfig.json",
-      "!**/dist",
-      "!**/out"
+      "!**/dist/**/*",
+      "!**/out/**/*",
+      "!**/.vercel/**/*",
+      "!**/.astro/**/*"
     ]
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },

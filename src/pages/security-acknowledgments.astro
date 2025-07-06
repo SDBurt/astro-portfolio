@@ -1,0 +1,265 @@
+---
+---
+
+<Layout
+  title="Security Acknowledgments"
+  description="Recognition for security researchers who have responsibly disclosed vulnerabilities"
+  type="website"
+>
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="prose prose-lg max-w-none">
+      <h1>Security Acknowledgments</h1>
+      
+      <p class="lead">
+        We recognize and thank security researchers who have responsibly disclosed 
+        vulnerabilities to help improve the security of sdburt.com.
+      </p>
+
+      <h2>Recognition Policy</h2>
+      
+      <p>
+        Security researchers who responsibly disclose valid vulnerabilities in accordance 
+        with our <a href="/security-policy">Security Policy</a> will be recognized here 
+        unless they prefer to remain anonymous.
+      </p>
+
+      <h2>Hall of Fame</h2>
+      
+      <div class="acknowledgment-section">
+        <p class="no-researchers">
+          No security vulnerabilities have been reported yet. This section will be 
+          updated as researchers contribute to the security of this website.
+        </p>
+      </div>
+
+      <h2>What We Recognize</h2>
+      
+      <p>We acknowledge researchers who have reported:</p>
+      
+      <ul>
+        <li><strong>Critical Vulnerabilities:</strong> Remote code execution, SQL injection, authentication bypass</li>
+        <li><strong>High Severity:</strong> Cross-site scripting (XSS), security header bypass, privilege escalation</li>
+        <li><strong>Medium Severity:</strong> Information disclosure, clickjacking, content injection</li>
+        <li><strong>Low Severity:</strong> Security misconfigurations, minor information leakage</li>
+      </ul>
+
+      <h2>Recognition Format</h2>
+      
+      <p>When we recognize researchers, we include:</p>
+      
+      <ul>
+        <li><strong>Researcher Name:</strong> As provided by the researcher</li>
+        <li><strong>Date:</strong> When the vulnerability was resolved</li>
+        <li><strong>Vulnerability Type:</strong> General category (e.g., XSS, CSP Bypass)</li>
+        <li><strong>Severity:</strong> Based on impact and exploitability</li>
+        <li><strong>Website/Social:</strong> If provided and researcher consents</li>
+      </ul>
+
+      <h2>Vulnerability Categories</h2>
+      
+      <div class="vulnerability-categories">
+        <div class="category-card">
+          <h3>🔴 Critical</h3>
+          <p>Vulnerabilities that could lead to complete system compromise</p>
+          <ul>
+            <li>Remote code execution</li>
+            <li>Authentication bypass</li>
+            <li>Complete data breach</li>
+          </ul>
+        </div>
+        
+        <div class="category-card">
+          <h3>🟠 High</h3>
+          <p>Significant security impact with potential for serious exploitation</p>
+          <ul>
+            <li>Cross-site scripting (XSS)</li>
+            <li>Security header bypass</li>
+            <li>Privilege escalation</li>
+          </ul>
+        </div>
+        
+        <div class="category-card">
+          <h3>🟡 Medium</h3>
+          <p>Moderate security impact requiring specific conditions</p>
+          <ul>
+            <li>Information disclosure</li>
+            <li>Clickjacking</li>
+            <li>Content injection</li>
+          </ul>
+        </div>
+        
+        <div class="category-card">
+          <h3>🟢 Low</h3>
+          <p>Minor security issues with limited impact</p>
+          <ul>
+            <li>Security misconfigurations</li>
+            <li>Minor information leakage</li>
+            <li>Non-exploitable findings</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>Reporting Guidelines</h2>
+      
+      <p>
+        To be eligible for recognition, please follow our 
+        <a href="/security-policy">Security Policy</a> guidelines:
+      </p>
+      
+      <ol>
+        <li>Report vulnerabilities responsibly and privately</li>
+        <li>Allow reasonable time for remediation before public disclosure</li>
+        <li>Provide clear reproduction steps and impact assessment</li>
+        <li>Act in good faith and avoid accessing or modifying others' data</li>
+      </ol>
+
+      <h2>Contact</h2>
+      
+      <p>
+        To report a security vulnerability:
+      </p>
+      
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:seandburt@gmail.com">seandburt@gmail.com</a></li>
+        <li><strong>Subject:</strong> "Security Vulnerability Report"</li>
+        <li><strong>Response Time:</strong> 48 hours maximum</li>
+      </ul>
+
+      <p class="thank-you">
+        Thank you to all security researchers who help keep the web safer through 
+        responsible disclosure practices.
+      </p>
+
+      <p class="text-sm text-muted-foreground mt-8">
+        <strong>Last Updated:</strong> January 6, 2025<br>
+        <strong>Version:</strong> 1.0
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+.prose {
+  color: var(--color-foreground);
+}
+
+.prose h1 {
+  color: var(--color-foreground);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-lg);
+}
+
+.prose h2 {
+  color: var(--color-foreground);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.prose h3 {
+  color: var(--color-foreground);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.prose p {
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-relaxed);
+}
+
+.prose ul, .prose ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-lg);
+}
+
+.prose li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.prose a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  text-decoration: none;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  color: var(--color-muted-foreground);
+  margin-bottom: var(--spacing-xl);
+}
+
+.acknowledgment-section {
+  background: var(--color-muted);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-xl) 0;
+}
+
+.no-researchers {
+  color: var(--color-muted-foreground);
+  text-align: center;
+  font-style: italic;
+  margin: 0;
+}
+
+.vulnerability-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+}
+
+.category-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+}
+
+.category-card h3 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.category-card p {
+  color: var(--color-muted-foreground);
+  margin-bottom: var(--spacing-md);
+}
+
+.category-card ul {
+  margin-bottom: 0;
+  padding-left: var(--spacing-md);
+}
+
+.category-card li {
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-sm);
+}
+
+.thank-you {
+  background: var(--color-muted);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary);
+  font-style: italic;
+  margin: var(--spacing-xl) 0;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+</style>

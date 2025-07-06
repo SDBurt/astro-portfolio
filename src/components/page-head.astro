@@ -6,21 +6,14 @@ import "@fontsource/inter/latin-600.css";
 import "@fontsource/crimson-text/latin-400.css";
 import "@fontsource/crimson-text/latin-600.css";
 import "@fontsource/jetbrains-mono/latin-400.css";
-import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
-import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
-import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
-import crimson400 from "@fontsource/crimson-text/files/crimson-text-latin-400-normal.woff2";
-import jetbrains400 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2";
-import { ClientRouter } from "astro:transitions";
-import SpeedInsights from "@vercel/speed-insights/astro";
 
-interface Props {
+export interface Props {
   title: string;
   description: string;
   image?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const _canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = "/nano.png" } = Astro.props;
 ---
@@ -28,6 +21,18 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Prevent FOUC by setting theme immediately -->
+<script is:inline>
+  (function() {
+    const theme = localStorage.theme || 'system';
+    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-theme', theme);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+  })();
+</script>
 
 <!-- Favicons -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -41,9 +46,10 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <meta name="generator" content={Astro.generator} />
 <meta name="robots" content="index, follow">
 
-<!-- Font preloads -->
+<!-- Critical font preloads -->
 <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={inter500} as="font" type="font/woff2" crossorigin />
+<!-- Other fonts loaded on demand -->
 <link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={crimson400} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={jetbrains400} as="font" type="font/woff2" crossorigin />
@@ -84,17 +90,30 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <meta name="twitter:image:alt" content={title} />
 
 <!-- Additional SEO tags -->
-<meta name="theme-color" content="#3b82f6" />
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)" />
 <meta name="color-scheme" content="light dark" />
 
+<!-- Performance hints -->
+<meta name="format-detection" content="telephone=no" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
 <!-- Preconnect to external domains for performance -->
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://vitals.vercel-insights.com" crossorigin />
 <link rel="preconnect" href="https://vercel.live" crossorigin />
 
-<!-- Security -->
+<!-- Resource hints for better loading -->
+<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+<!-- Security Headers -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://vercel.live https://vitals.vercel-insights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vitals.vercel-insights.com https://vercel.live; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 
 
 <ClientRouter />
@@ -193,5 +212,4 @@ const { title, description, image = "/nano.png" } = Astro.props;
 
   document.addEventListener("DOMContentLoaded", () => init());
   document.addEventListener("astro:after-swap", () => init());
-  preloadTheme();
 </script>

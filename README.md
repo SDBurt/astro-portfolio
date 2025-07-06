@@ -128,6 +128,41 @@ Key configuration files:
 - **Bundle Size**: Minimal JavaScript with selective hydration
 - **Image Optimization**: Automatic WebP conversion and responsive sizing
 
+## 🔐 Security
+
+This portfolio implements comprehensive security measures:
+
+### Security Headers
+- **Content Security Policy (CSP)**: Prevents XSS and injection attacks
+- **Strict Transport Security (HSTS)**: Forces HTTPS connections
+- **X-Frame-Options**: Prevents clickjacking attacks
+- **X-Content-Type-Options**: Prevents MIME sniffing attacks
+- **Referrer Policy**: Controls referrer information sharing
+
+### Security Files
+- **robots.txt**: Blocks crawlers from sensitive paths
+- **security.txt**: RFC 9116 compliant security disclosure information
+- **vercel.json**: Server-level security header configuration
+
+### Security Monitoring
+```bash
+# Run security audit
+pnpm run security:audit
+
+# Check for outdated dependencies
+pnpm run security:outdated
+
+# Update dependencies
+pnpm run security:update
+```
+
+### Security Best Practices
+- No user authentication or sensitive data storage
+- Static site generation for minimal attack surface
+- Dependency vulnerability scanning
+- Secure content delivery via Vercel edge network
+- Regular security updates and monitoring
+
 ## 🤝 Contributing
 
 This is a personal portfolio, but feedback and suggestions are welcome:

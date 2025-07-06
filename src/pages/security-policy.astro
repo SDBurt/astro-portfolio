@@ -1,0 +1,200 @@
+---
+---
+
+<Layout
+  title="Security Policy"
+  description="Security vulnerability disclosure policy for sdburt.com"
+  type="website"
+>
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="prose prose-lg max-w-none">
+      <h1>Security Policy</h1>
+      
+      <p class="lead">
+        This document outlines the security vulnerability disclosure policy for sdburt.com, 
+        a personal portfolio website built with Astro and deployed on Vercel.
+      </p>
+
+      <h2>Scope</h2>
+      
+      <p>This security policy applies to:</p>
+      <ul>
+        <li><strong>Primary domain:</strong> www.sdburt.com</li>
+        <li><strong>Subdomains:</strong> Any official subdomains of sdburt.com</li>
+        <li><strong>Source code:</strong> Public repositories related to this website</li>
+      </ul>
+
+      <h2>In Scope Vulnerabilities</h2>
+      
+      <p>We are interested in receiving reports about the following types of vulnerabilities:</p>
+      
+      <ul>
+        <li><strong>Cross-Site Scripting (XSS)</strong> - Stored, reflected, or DOM-based XSS vulnerabilities</li>
+        <li><strong>Content Security Policy (CSP) Bypass</strong> - Methods to bypass our CSP implementation</li>
+        <li><strong>Cross-Site Request Forgery (CSRF)</strong> - Though unlikely given our static nature</li>
+        <li><strong>Information Disclosure</strong> - Exposure of sensitive information or system details</li>
+        <li><strong>Security Header Bypass</strong> - Methods to bypass security headers</li>
+        <li><strong>Clickjacking</strong> - Frame-based attacks despite X-Frame-Options</li>
+        <li><strong>Content Injection</strong> - Injection of malicious content into pages</li>
+      </ul>
+
+      <h2>Out of Scope</h2>
+      
+      <p>The following are explicitly <strong>out of scope</strong> for this security policy:</p>
+      
+      <ul>
+        <li><strong>Social Engineering</strong> - Attacks targeting individuals rather than systems</li>
+        <li><strong>Physical Security</strong> - Physical access to systems or infrastructure</li>
+        <li><strong>Denial of Service (DoS/DDoS)</strong> - Attacks aimed at disrupting service availability</li>
+        <li><strong>Brute Force Attacks</strong> - There are no login systems to attack</li>
+        <li><strong>Rate Limiting</strong> - No user-generated content or forms to rate limit</li>
+        <li><strong>Email Security</strong> - Email systems are managed by third-party providers</li>
+        <li><strong>Third-Party Services</strong> - Vulnerabilities in Vercel, GitHub, or other external services</li>
+        <li><strong>Self-XSS</strong> - Vulnerabilities requiring user to attack themselves</li>
+        <li><strong>Missing Security Headers</strong> - Unless you can demonstrate actual exploitation</li>
+        <li><strong>Theoretical Vulnerabilities</strong> - Issues without practical exploitation paths</li>
+      </ul>
+
+      <h2>Responsible Disclosure</h2>
+      
+      <p>If you discover a security vulnerability, please follow these guidelines:</p>
+      
+      <ol>
+        <li><strong>Do not</strong> access, modify, or delete data belonging to others</li>
+        <li><strong>Do not</strong> perform actions that could harm the availability of the service</li>
+        <li><strong>Do not</strong> access or attempt to access accounts or data you don't own</li>
+        <li><strong>Do not</strong> publicly disclose the vulnerability before it has been resolved</li>
+        <li><strong>Do</strong> provide detailed steps to reproduce the vulnerability</li>
+        <li><strong>Do</strong> include proof-of-concept code or screenshots when helpful</li>
+        <li><strong>Do</strong> be patient while we investigate and resolve the issue</li>
+      </ol>
+
+      <h2>Reporting Process</h2>
+      
+      <p>To report a security vulnerability:</p>
+      
+      <ol>
+        <li><strong>Email:</strong> Send detailed information to <a href="mailto:seandburt@gmail.com">seandburt@gmail.com</a></li>
+        <li><strong>Subject Line:</strong> Use "Security Vulnerability Report" as the subject</li>
+        <li><strong>Include:</strong>
+          <ul>
+            <li>Description of the vulnerability</li>
+            <li>Steps to reproduce the issue</li>
+            <li>Potential impact assessment</li>
+            <li>Suggested remediation (if known)</li>
+            <li>Your contact information</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h2>Response Timeline</h2>
+      
+      <p>We commit to the following response timeline:</p>
+      
+      <ul>
+        <li><strong>Initial Response:</strong> Within 48 hours of receipt</li>
+        <li><strong>Triage:</strong> Within 72 hours of receipt</li>
+        <li><strong>Status Updates:</strong> Every 7 days until resolution</li>
+        <li><strong>Resolution:</strong> Varies based on severity and complexity</li>
+      </ul>
+
+      <h2>Recognition</h2>
+      
+      <p>
+        Researchers who responsibly disclose valid security vulnerabilities will be 
+        recognized on our <a href="/security-acknowledgments">Security Acknowledgments</a> page, 
+        unless they prefer to remain anonymous.
+      </p>
+
+      <h2>Legal Safe Harbor</h2>
+      
+      <p>
+        We support responsible security research and will not pursue legal action against 
+        researchers who:
+      </p>
+      
+      <ul>
+        <li>Follow this responsible disclosure policy</li>
+        <li>Act in good faith and avoid privacy violations</li>
+        <li>Do not perform actions that could harm our service or users</li>
+        <li>Report vulnerabilities promptly and confidentially</li>
+      </ul>
+
+      <h2>Contact Information</h2>
+      
+      <p>
+        For security-related inquiries, please contact:
+      </p>
+      
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:seandburt@gmail.com">seandburt@gmail.com</a></li>
+        <li><strong>Response Time:</strong> 48 hours maximum</li>
+        <li><strong>Languages:</strong> English</li>
+      </ul>
+
+      <p class="text-sm text-muted-foreground mt-8">
+        <strong>Last Updated:</strong> January 6, 2025<br>
+        <strong>Version:</strong> 1.0
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+.prose {
+  color: var(--color-foreground);
+}
+
+.prose h1 {
+  color: var(--color-foreground);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: var(--spacing-lg);
+}
+
+.prose h2 {
+  color: var(--color-foreground);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-md);
+}
+
+.prose p {
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-relaxed);
+}
+
+.prose ul, .prose ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-lg);
+}
+
+.prose li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.prose a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  text-decoration: none;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  color: var(--color-muted-foreground);
+  margin-bottom: var(--spacing-xl);
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+</style>

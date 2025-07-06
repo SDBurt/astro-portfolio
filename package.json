@@ -9,7 +9,12 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "biome lint .",
-    "format": "biome format . "
+    "format": "biome format . ",
+    "security:audit": "pnpm audit --audit-level moderate",
+    "security:outdated": "pnpm outdated",
+    "security:update": "pnpm update --latest",
+    "prepare": "husky",
+    "pre-commit": "lint-staged"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -41,6 +46,13 @@
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
     "astro": "^5.11.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "typescript": "^5.8.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,astro}": [
+      "biome check --write --unsafe"
+    ]
   }
 }

@@ -16,12 +16,13 @@ export default defineConfig({
   // Enable prefetching for faster navigation
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: 'viewport'
+    defaultStrategy: 'hover'
   },
 
   // Build optimizations
   build: {
     concurrency: 2, // Parallel builds for better performance
+    inlineStylesheets: 'auto', // Inline critical CSS
   },
 
   // Image optimization configuration
@@ -67,9 +68,22 @@ export default defineConfig({
   vite: {
     build: {
       // Inline small assets for better performance
-      assetsInlineLimit: 1024,
+      assetsInlineLimit: 2048,
       // CSS code splitting
       cssCodeSplit: true,
+      // Chunk splitting for better caching
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor': ['react', 'react-dom'],
+            'utils': ['clsx']
+          }
+        }
+      }
     },
+    ssr: {
+      // Optimize SSR performance
+      noExternal: ['react-aria-components']
+    }
   },
 });

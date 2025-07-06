@@ -22,9 +22,16 @@ pnpm-debug.log*
 # API keys and secrets
 *.key
 *.pem
+*.p12
+*.pfx
 config/secrets.json
 secrets/
 .secrets
+.security/
+security-config.json
+private-keys/
+certificates/
+.htpasswd
 
 # Claude Code and AI assistants
 CLAUDE.md

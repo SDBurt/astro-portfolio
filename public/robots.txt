@@ -4,9 +4,21 @@ Allow: /
 # Sitemap
 Sitemap: https://www.sdburt.com/sitemap-index.xml
 
-# Disallow specific paths if needed
-# Disallow: /private/
-# Disallow: /admin/
+# Security: Block common attack vectors
+Disallow: /api/
+Disallow: /.well-known/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /.env
+Disallow: /config/
+Disallow: /logs/
+Disallow: /*?*session=
+Disallow: /*?*token=
+Disallow: /*wp-admin/
+Disallow: /*wp-login.php
+Disallow: /*wp-content/
 
 # Allow search engines to crawl images
 User-agent: Googlebot-Image
