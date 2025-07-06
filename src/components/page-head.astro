@@ -29,18 +29,6 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-<!-- Prevent FOUC by setting theme immediately -->
-<script is:inline>
-  (function() {
-    const theme = localStorage.theme || 'system';
-    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.setAttribute('data-theme', theme);
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    }
-  })();
-</script>
-
 <!-- Favicons -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
