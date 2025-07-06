@@ -1,5 +1,8 @@
-# Simple pre-commit check
-echo "Running basic checks..."
+# Pre-commit checks
+echo "Running pre-commit checks..."
 
-# Type checking only
+# Format code
+pnpm lint-staged
+
+# Type checking
 pnpm astro check
