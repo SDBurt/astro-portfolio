@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
-    "astro": "^5.11.0",
+    "astro": "^5.12.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "typescript": "^5.8.3"
