@@ -21,21 +21,22 @@ const projects = (await getCollection("projects"))
 
 <PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
   <Container>
-    <h1 class="font-bold text-primary dark:text-white">
+    <h1 class="page-title">
       {HOME.TITLE}
     </h1>
-    <div class="space-y-16">
+    <div class="space-y-24">
       <section>
         <article class="space-y-4">
           <p>
-            Software engineer specializing in <strong>full stack development</strong> and <strong>data engineering</strong>. 
-            I build scalable systems that process data efficiently and create AI-powered solutions 
-            that solve real-world problems.
+            I'm a software engineer who gets genuinely excited about data. There's something satisfying
+            about taking messy, chaotic information and turning it into something that actually helps
+            people make decisions.
           </p>
           <p>
-            Currently working at <strong>Consumer Genius</strong> on data pipelines and analytics platforms. 
-            Previously led the technical development of <strong>Fire AI</strong> at Hummingbird Drones, an ML platform 
-            that detects wildfires from drone imagery and creates geo-referenced pdf maps.
+            Right now I'm at <strong>Consumer Genius</strong>, building data pipelines and figuring out
+            how to make sense of data from multiple sources without wanting to pull your hair out. Before that,
+            I helped build <strong>Fire AI</strong> at Hummingbird Drones - an ML system that spots
+            wildfires from drone footage. Turns out teaching computers to see fire is harder than it sounds.
           </p>
         </article>
       </section>
@@ -78,11 +79,11 @@ const projects = (await getCollection("projects"))
 
       <section class="space-y-4">
         <h5 class="section-header">
-          Contact
+          Say hello
         </h5>
         <article>
           <p>
-            Get in touch via email or social media.
+            Want to chat about data, side projects, or just say hi? I'm always happy to connect.
           </p>
         </article>
         <ul class="flex flex-wrap gap-2 list-none">

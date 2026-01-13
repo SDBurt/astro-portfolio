@@ -19,8 +19,8 @@ export const AUTHOR: Author = {
 };
 
 export const HOME: Metadata = {
-  TITLE: "Software Engineer",
-  DESCRIPTION: "Sean Burt - Software engineer specializing in web development and machine learning.",
+  TITLE: "Hey, I'm Sean",
+  DESCRIPTION: "Sean Burt - Software engineer who loves turning messy data into something useful.",
 };
 
 export const BLOG: Metadata = {

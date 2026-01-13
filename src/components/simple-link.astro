@@ -9,10 +9,10 @@ const { entry } = Astro.props;
 ---
 
 <div class="block">
-  <a href={`/${entry.collection}/${entry.id}`} class="font-semibold text-foreground hover:text-primary transition-colors leading-tight inline-block">
+  <a href={`/${entry.collection}/${entry.id}`} class="font-semibold text-lg text-foreground hover:text-primary transition-colors leading-snug inline-block tracking-tight">
     {entry.data.title}
   </a>
-  <div class="text-sm text-muted-foreground mt-1">
+  <div class="text-sm text-muted-foreground mt-2 leading-relaxed">
     {entry.data.description}
   </div>
 </div>
