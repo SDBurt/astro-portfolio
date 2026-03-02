@@ -106,6 +106,37 @@ if (type === "website") {
 
 // Remove undefined values
 structuredData = JSON.parse(JSON.stringify(structuredData));
+
+// Build BreadcrumbList for nested pages
+const pathname = Astro.url.pathname;
+const segments = pathname.split("/").filter(Boolean);
+let breadcrumbData: any = null;
+
+if (segments.length > 0) {
+  const items = [
+    { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
+  ];
+
+  for (let i = 0; i < segments.length; i++) {
+    const isLast = i === segments.length - 1;
+    const itemUrl = new URL(segments.slice(0, i + 1).join("/") + "/", baseUrl).href;
+    items.push({
+      "@type": "ListItem",
+      position: i + 2,
+      name: isLast && title ? title : segments[i].charAt(0).toUpperCase() + segments[i].slice(1),
+      item: itemUrl,
+    });
+  }
+
+  breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items,
+  };
+}
 ---
 
 <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+{breadcrumbData && (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbData)} />
+)}

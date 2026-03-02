@@ -22,7 +22,7 @@ const post = Astro.props;
 const { Content } = await render(post);
 ---
 
-<PageLayout title={post.data.title} description={post.data.description}>
+<PageLayout title={post.data.title} description={post.data.description} type="article" datePublished={post.data.date} tags={post.data.tags}>
   <Container>
     <div>
       <BackToPrev href="/blog"> Back to blog </BackToPrev>
