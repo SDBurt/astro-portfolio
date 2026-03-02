@@ -2,6 +2,21 @@
 import Container from "@/components/container.astro";
 import Link from "@/components/link.astro";
 import { SITE } from "@/config/site";
+
+const pathname = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+}
+
+const navLinks = [
+  { href: "/", label: "home" },
+  { href: "/work", label: "work" },
+  { href: "/projects", label: "projects" },
+  { href: "/blog", label: "blog" },
+  { href: "/about", label: "about" },
+];
 ---
 
 <header
@@ -14,25 +29,44 @@ import { SITE } from "@/config/site";
           {SITE.NAME}
         </div>
       </Link>
-      <nav class="flex gap-1">
-        <Link href="/"> home </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href="/work"> work </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href="/projects"> projects </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href="/blog"> blog </Link>
-        <span>
-          {`/`}
-        </span>
-        <Link href="/about"> about </Link>
+      <nav class="flex gap-1 items-center">
+        {navLinks.map((link, i) => (
+          <>
+            {i > 0 && <span class="nav-separator">/</span>}
+            <a
+              href={link.href}
+              class:list={["nav-link", { "nav-link--active": isActive(link.href) }]}
+              {...(isActive(link.href) ? { "aria-current": "page" } : {})}
+            >
+              {link.label}
+            </a>
+          </>
+        ))}
       </nav>
     </div>
   </Container>
 </header>
+
+<style>
+.nav-link {
+  color: var(--color-muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color var(--transition-normal);
+}
+
+.nav-link:hover {
+  color: var(--color-foreground);
+}
+
+.nav-link--active {
+  color: var(--color-foreground);
+  font-weight: var(--font-weight-medium);
+}
+
+.nav-separator {
+  color: var(--color-muted-foreground);
+  opacity: 0.5;
+  user-select: none;
+}
+</style>
