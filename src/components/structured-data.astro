@@ -35,6 +35,7 @@ let structuredData: any = {
   description,
   url,
   image: imageUrl,
+  inLanguage: "en-US",
 };
 
 if (type === "website") {
@@ -50,14 +51,6 @@ if (type === "website") {
         name: "Consumer Genius"
       }
     },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${baseUrl}/blog?q={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
   };
 } else if (type === "article") {
   structuredData = {
