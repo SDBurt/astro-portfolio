@@ -58,6 +58,13 @@ const { Content } = await render(project);
           </nav>
         )
       }
+      {project.data.tags.length > 0 && (
+        <div class="tag-list" style="margin-top:0.5rem;">
+          {project.data.tags.map((tag: string) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
     </div>
     <article>
       <Content />

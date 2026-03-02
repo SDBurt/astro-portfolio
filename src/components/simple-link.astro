@@ -1,18 +1,32 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import FormattedDate from "@/components/formatted-date.astro";
 
 type Props = {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
 };
 
 const { entry } = Astro.props;
+const tags = entry.data.tags ?? [];
 ---
 
 <div class="block">
-  <a href={`/${entry.collection}/${entry.id}`} class="font-semibold text-lg text-foreground hover:text-primary transition-colors leading-snug inline-block tracking-tight">
-    {entry.data.title}
-  </a>
+  <div class="flex items-center gap-2">
+    <a href={`/${entry.collection}/${entry.id}`} class="font-semibold text-lg text-foreground hover:text-primary transition-colors leading-snug inline-block tracking-tight">
+      {entry.data.title}
+    </a>
+    <span class="text-sm text-muted-foreground" style="white-space:nowrap;">
+      <FormattedDate date={entry.data.date} />
+    </span>
+  </div>
   <div class="text-sm text-muted-foreground mt-2 leading-relaxed">
     {entry.data.description}
   </div>
+  {tags.length > 0 && (
+    <div class="tag-list mt-2">
+      {tags.map((tag: string) => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+  )}
 </div>
