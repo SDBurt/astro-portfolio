@@ -12,6 +12,7 @@ import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.sdburt.com",
+  trailingSlash: "never",
 
   // Enable prefetching for faster navigation
   prefetch: {
@@ -59,7 +60,15 @@ export default defineConfig({
       ],
       gfm: true,
     }),
-    sitemap(),
+    sitemap({
+      serialize(item) {
+        // Strip trailing slashes from sitemap URLs (except root)
+        if (item.url.endsWith("/") && item.url !== "https://www.sdburt.com/") {
+          item.url = item.url.slice(0, -1);
+        }
+        return item;
+      },
+    }),
   ],
 
   adapter: vercel(),

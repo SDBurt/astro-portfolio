@@ -23,7 +23,9 @@ export interface Props {
   tags?: string[];
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// Normalize pathname: strip trailing slash (except for root "/")
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const canonicalURL = new URL(pathname, Astro.site);
 
 const { title, description, image = "/nano.png", type = "website", datePublished, dateModified, tags = [] } = Astro.props;
 const ogType = type === "article" ? "article" : "website";
@@ -118,10 +120,10 @@ const ogType = type === "article" ? "article" : "website";
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={ogType} />
 <meta property="og:site_name" content="Sean Burt - Software Engineer" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={new URL(image, canonicalURL)} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content={title} />
@@ -140,10 +142,10 @@ const ogType = type === "article" ? "article" : "website";
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@sdburt" />
 <meta name="twitter:creator" content="@sdburt" />
-<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:url" content={canonicalURL} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image, Astro.url)} />
+<meta name="twitter:image" content={new URL(image, canonicalURL)} />
 <meta name="twitter:image:alt" content={title} />
 
 <!-- Additional SEO tags -->

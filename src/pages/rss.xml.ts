@@ -20,11 +20,12 @@ export async function GET(context: Context) {
     title: HOME.TITLE,
     description: HOME.DESCRIPTION,
     site: context.site,
+    trailingSlash: false,
     items: items.map((item) => ({
       title: item.data.title,
       description: item.data.description,
       pubDate: item.data.date,
-      link: `/${item.collection}/${item.id}/`,
+      link: `/${item.collection}/${item.id}`,
     })),
   });
 }
