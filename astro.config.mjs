@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
@@ -69,6 +70,8 @@ export default defineConfig({
       },
     }),
   ],
+
+  adapter: vercel(),
 
   vite: {
     build: {
