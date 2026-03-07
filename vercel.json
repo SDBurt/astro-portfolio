@@ -2,8 +2,8 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "sdburt.com" }],
-      "destination": "https://www.sdburt.com/:path*",
+      "has": [{ "type": "host", "value": "www.sdburt.com" }],
+      "destination": "https://sdburt.com/:path*",
       "permanent": true
     }
   ],

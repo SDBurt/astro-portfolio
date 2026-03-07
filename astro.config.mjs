@@ -10,7 +10,7 @@ import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://www.sdburt.com",
+  site: "https://sdburt.com",
   trailingSlash: "never",
 
   env: {
@@ -63,7 +63,7 @@ export default defineConfig({
     }),
     sitemap({
       serialize(item) {
-        if (item.url.endsWith("/") && item.url !== "https://www.sdburt.com/") {
+        if (item.url.endsWith("/") && item.url !== "https://sdburt.com/") {
           item.url = item.url.slice(0, -1);
         }
         return item;

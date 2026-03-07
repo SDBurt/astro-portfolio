@@ -4,7 +4,7 @@ A modern, performance-focused portfolio website built with Astro 5, showcasing s
 
 ## 🚀 Live Site
 
-Visit [sdburt.com](https://www.sdburt.com) to see the portfolio in action.
+Visit [sdburt.com](https://sdburt.com) to see the portfolio in action.
 
 ## ✨ Features
 
