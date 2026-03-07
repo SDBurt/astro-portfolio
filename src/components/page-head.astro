@@ -156,13 +156,23 @@ const ogType = type === "article" ? "article" : "website";
 
 <script>
   import type { TransitionBeforeSwapEvent } from "astro:transitions/client";
-  document.addEventListener("astro:before-swap", (e) =>
-    [
-      ...(e as TransitionBeforeSwapEvent).newDocument.head.querySelectorAll(
-        'link[as="font"]'
-      ),
-    ].forEach((link) => link.remove())
-  );
+  document.addEventListener("astro:before-swap", (e) => {
+    const event = e as TransitionBeforeSwapEvent;
+
+    // Remove duplicate font preloads from new document
+    event.newDocument.head
+      .querySelectorAll('link[as="font"]')
+      .forEach((link) => link.remove());
+
+    // Preserve theme across view transitions
+    const theme = localStorage.getItem("theme") || "system";
+    const isDark =
+      theme === "dark" ||
+      (theme === "system" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    event.newDocument.documentElement.setAttribute("data-theme", theme);
+    event.newDocument.documentElement.classList.toggle("dark", isDark);
+  });
 </script>
 
 <script>
