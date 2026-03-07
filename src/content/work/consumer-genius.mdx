@@ -3,7 +3,11 @@ company: "Consumer Genius"
 role: "Full-Stack Software Developer"
 dateStart: "10/23/2023"
 dateEnd: "Present"
+skills: ["Go", "Python", "AWS Lambda", "PostgreSQL", "DBT", "Dagster", "DLT", "SQS", "SNS", "Terraform", "QuickSight"]
 ---
 
-- Work with downstream stakeholders to provide data-related business value.
-- Designing, expanding, maintaining, and improving the data pipelines and processes.
+- Architected data lake ingesting 30K+ daily records from 7+ platforms using Lambda, DLT, Dagster, and DBT, enabling lead-level P&L tracking and identifying under-performing verticals.
+- Built automated lead arbitrage system in Go processing 5K+ leads daily through quality validation, deduplication against PostgreSQL historical data, and delivery to buyer REST APIs.
+- Engineered real-time marketing automation pipeline with Lambda, SQS, and SNS, delivering leads instantly to multiple platforms and replacing next-day batch processing.
+- Developed CASL compliance automation synchronizing unsubscribers across platforms and auto-removing expired consents via scheduled Lambda functions, preventing regulatory fines.
+- Designed dimensional data models with domain-specific marts (marketing, finance, operations) and built QuickSight dashboards exposing margin trends across 10+ verticals.
