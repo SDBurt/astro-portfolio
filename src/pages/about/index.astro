@@ -26,10 +26,10 @@ const work = await Promise.all(
 
 <PageLayout title={ABOUT.TITLE} description={ABOUT.DESCRIPTION} type="person">
   <Container>
+    <h1 class="page-title" style="margin-bottom: var(--spacing-xl);">
+      {ABOUT.TITLE}
+    </h1>
     <div class="space-y-24">
-      <h1 class="page-title">
-        {ABOUT.TITLE}
-      </h1>
       <section>
         <article class="space-y-4">
           <p>
@@ -55,18 +55,20 @@ const work = await Promise.all(
           </h2>
           <Link href="/work" class="section-link"> See all work </Link>
         </div>
-        <ul class="flex flex-col space-y-4 list-none">
+        <ul class="flex flex-col list-none work-list">
           {
             work.map((entry) => (
-              <li>
-                <div class="text-sm opacity-75">
-                  {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+              <li class="work-entry">
+                <div class="work-entry-header">
+                  <div class="work-entry-company">
+                    {entry.data.company}
+                  </div>
+                  <div class="work-entry-meta">
+                    <span class="work-entry-role">{entry.data.role}</span>
+                    <span class="work-entry-date">{dateRange(entry.data.dateStart, entry.data.dateEnd)}</span>
+                  </div>
                 </div>
-                <div class="font-semibold text-primary dark:text-white">
-                  {entry.data.company}
-                </div>
-                <div class="text-sm opacity-75">{entry.data.role}</div>
-                <article>
+                <article class="work-entry-content">
                   <entry.Content />
                 </article>
               </li>

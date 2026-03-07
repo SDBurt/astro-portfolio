@@ -15,11 +15,34 @@ const { href, external, underline = true, class: className, ...rest } = Astro.pr
   href={href}
   target={external ? '_blank' : '_self'}
   class={cn(
-    'text-primary hover:text-foreground',
-    underline && 'underline underline-offset-4',
+    'link-base',
+    underline && 'link-underline',
     className
   )}
   {...rest}
 >
   <slot />
 </a>
+
+<style>
+.link-base {
+  color: var(--color-foreground);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.link-base:hover {
+  color: var(--color-muted-foreground);
+}
+
+.link-underline {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--color-border);
+}
+
+.link-underline:hover {
+  text-decoration-color: var(--color-muted-foreground);
+}
+</style>

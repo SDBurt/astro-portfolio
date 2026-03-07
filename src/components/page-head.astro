@@ -1,15 +1,8 @@
 ---
 import "../styles/globals.css";
-import "@fontsource/inter/latin-400.css";
-import "@fontsource/inter/latin-500.css";
-import "@fontsource/inter/latin-600.css";
-import "@fontsource/crimson-text/latin-400.css";
-import "@fontsource/crimson-text/latin-600.css";
+import "@fontsource-variable/plus-jakarta-sans/wght.css";
 import "@fontsource/jetbrains-mono/latin-400.css";
-import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
-import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
-import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
-import crimson400 from "@fontsource/crimson-text/files/crimson-text-latin-400-normal.woff2";
+import plusJakarta from "@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2";
 import jetbrains400 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2";
 import { ClientRouter } from "astro:transitions";
 
@@ -96,11 +89,7 @@ const ogType = type === "article" ? "article" : "website";
 <meta name="robots" content="index, follow">
 
 <!-- Critical font preloads -->
-<link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={inter500} as="font" type="font/woff2" crossorigin />
-<!-- Other fonts loaded on demand -->
-<link rel="preload" href={inter600} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={crimson400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={plusJakarta} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={jetbrains400} as="font" type="font/woff2" crossorigin />
 
 <!-- Canonical URL -->
@@ -162,16 +151,13 @@ const ogType = type === "article" ? "article" : "website";
 <!-- Preconnect to external domains for performance -->
 <link rel="preconnect" href="https://us.i.posthog.com" crossorigin />
 
-<!-- Resource hints for better loading -->
-<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-
 <!-- Security Headers -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://us.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://us.i.posthog.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://us.i.posthog.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://us.i.posthog.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 
 
 <ClientRouter />
