@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -7,37 +7,37 @@ import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
-import vercel from "@astrojs/vercel";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.sdburt.com",
   trailingSlash: "never",
 
-  // Enable prefetching for faster navigation
+  env: {
+    schema: {
+      PUBLIC_POSTHOG_KEY: envField.string({ context: "client", access: "public", optional: true }),
+      PUBLIC_POSTHOG_HOST: envField.string({ context: "client", access: "public", optional: true, default: "https://us.i.posthog.com" }),
+    },
+  },
+
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover'
   },
 
-  // Build optimizations
   build: {
-    concurrency: 2, // Parallel builds for better performance
-    inlineStylesheets: 'auto', // Inline critical CSS
+    inlineStylesheets: 'auto',
   },
 
-  // Image optimization configuration
   image: {
     remotePatterns: [{ protocol: "https" }]
   },
 
-  // Compress HTML output
   compressHTML: true,
 
   integrations: [
     react(),
     mdx({
-      optimize: true, // Enable MDX optimization for better build performance
+      optimize: true,
       syntaxHighlight: "shiki",
       shikiConfig: {
         theme: "github-dark",
@@ -62,7 +62,6 @@ export default defineConfig({
     }),
     sitemap({
       serialize(item) {
-        // Strip trailing slashes from sitemap URLs (except root)
         if (item.url.endsWith("/") && item.url !== "https://www.sdburt.com/") {
           item.url = item.url.slice(0, -1);
         }
@@ -71,27 +70,12 @@ export default defineConfig({
     }),
   ],
 
-  adapter: vercel(),
-
-  // Vite optimizations
   vite: {
     build: {
-      // Inline small assets for better performance
       assetsInlineLimit: 2048,
-      // CSS code splitting
       cssCodeSplit: true,
-      // Chunk splitting for better caching
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            'vendor': ['react', 'react-dom'],
-            'utils': ['clsx']
-          }
-        }
-      }
     },
     ssr: {
-      // Optimize SSR performance
       noExternal: ['react-aria-components']
     }
   },
