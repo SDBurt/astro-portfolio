@@ -41,6 +41,7 @@ const { title, description, type = "website", image, datePublished, dateModified
       dateModified={dateModified}
       tags={tags}
     />
+    <PostHog />
   </head>
   <body
     class="font-sans antialiased flex flex-col bg-background dark:bg-background/75 text-foreground dark:text-foreground/75"
@@ -51,6 +52,5 @@ const { title, description, type = "website", image, datePublished, dateModified
       <slot />
     </main>
     <Footer />
-    <PostHog />
   </body>
 </html>
