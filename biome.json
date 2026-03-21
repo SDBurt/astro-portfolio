@@ -9,7 +9,7 @@
       "!**/tsconfig.json",
       "!**/dist/**/*",
       "!**/out/**/*",
-      "!**/.vercel/**/*",
+      "!**/.wrangler/**/*",
       "!**/.astro/**/*"
     ]
   },
