@@ -8,6 +8,8 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import vercel from "@astrojs/vercel";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://sdburt.com",
@@ -64,7 +66,7 @@ export default defineConfig({
     }),
   ],
 
-  adapter: vercel(),
+  adapter: cloudflare(),
 
   vite: {
     build: {
