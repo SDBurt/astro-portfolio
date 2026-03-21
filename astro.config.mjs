@@ -72,6 +72,7 @@ export default defineConfig({
     build: {
       assetsInlineLimit: 2048,
       cssCodeSplit: true,
+      sourcemap: false,
     },
     ssr: {
       noExternal: ['react-aria-components']

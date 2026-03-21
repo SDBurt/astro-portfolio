@@ -1,5 +1,5 @@
 Contact: mailto:seandburt@gmail.com
-Expires: 2025-12-31T23:59:59Z
+Expires: 2026-12-31T23:59:59Z
 Preferred-Languages: en
 Canonical: https://sdburt.com/.well-known/security.txt
 Policy: https://sdburt.com/security-policy
