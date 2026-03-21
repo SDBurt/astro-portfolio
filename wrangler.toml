@@ -2,9 +2,5 @@ name = "sdburt-com"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 
-[vars]
-PUBLIC_POSTHOG_KEY = "phc_153Gcmy0fb59lUp7UzXWyxzPl26SDB017AwCxcq9lxX"
-PUBLIC_POSTHOG_HOST = "https://us.i.posthog.com"
-
 [assets]
 directory = "dist"
