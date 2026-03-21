@@ -1,14 +1,14 @@
 import * as React from "react"
 import { Button as AriaButton, type ButtonProps as AriaButtonProps } from "react-aria-components"
 
-interface ButtonProps extends AriaButtonProps {
+interface ButtonProps extends Omit<AriaButtonProps, "render"> {
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
   size?: "default" | "sm" | "lg" | "icon"
-  render?: React.ReactElement
+  asChild?: React.ReactElement
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", render, style, ...props }, ref) => {
+  ({ className, variant = "default", size = "default", asChild, style, ...props }, ref) => {
     const buttonStyles: React.CSSProperties = {
       display: "inline-flex",
       alignItems: "center",
@@ -93,13 +93,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...sizeStyles[size],
     }
     
-    if (render) {
-      return React.cloneElement(render, {
-        className: [className, (render.props as any)?.className].filter(Boolean).join(" "),
-        style: { ...combinedStyles, ...(render.props as any)?.style },
+    if (asChild) {
+      return React.cloneElement(asChild, {
+        className: [className, (asChild.props as any)?.className].filter(Boolean).join(" "),
+        style: { ...combinedStyles, ...(asChild.props as any)?.style },
         ref,
         ...props,
-        ...(render.props as any),
+        ...(asChild.props as any),
       })
     }
     
