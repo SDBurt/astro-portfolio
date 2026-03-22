@@ -74,8 +74,13 @@ export default defineConfig({
       cssCodeSplit: true,
       sourcemap: false,
     },
+    resolve: {
+      alias: {
+        'react-dom/server': 'react-dom/server.edge',
+      },
+    },
     ssr: {
-      noExternal: ['react-aria-components']
-    }
+      noExternal: ['react-aria-components'],
+    },
   },
 });
