@@ -1,6 +1,6 @@
 # Sean Burt - Portfolio & Blog
 
-A modern, performance-focused portfolio website built with Astro 5, showcasing software engineering projects and technical writing.
+A modern, performance-focused portfolio website built with Astro 7, showcasing software engineering projects and technical writing.
 
 ## 🚀 Live Site
 
@@ -8,9 +8,9 @@ Visit [sdburt.com](https://sdburt.com) to see the portfolio in action.
 
 ## ✨ Features
 
-- **Modern Stack**: Astro 5.11 with React 19 and TypeScript
-- **Accessible Design**: React Aria Components with comprehensive ARIA support
-- **Performance Optimized**: Vanilla CSS design system, image optimization, and Vercel Speed Insights
+- **Modern Stack**: Astro 7 with TypeScript and zero client framework runtime
+- **Accessible Design**: Semantic Astro components, keyboard navigation, and reduced-motion support
+- **Performance Optimized**: Static HTML, vanilla CSS, optimized local assets, and Cloudflare's CDN
 - **Content Management**: MDX with syntax highlighting, automatic table of contents, and enhanced plugins
 - **SEO Ready**: Structured data, Open Graph tags, and automatic sitemap generation
 - **Dark Mode**: System preference detection with manual toggle
@@ -18,13 +18,13 @@ Visit [sdburt.com](https://sdburt.com) to see the portfolio in action.
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Astro 5.11](https://astro.build) - Static site generator with islands architecture
-- **UI Components**: [React 19](https://react.dev) with [React Aria Components](https://react-spectrum.adobe.com/react-aria/)
+- **Framework**: [Astro 7](https://astro.build) - Static site generator with islands architecture
+- **UI Components**: Astro components with no client-side framework runtime
 - **Styling**: Vanilla CSS with custom design system and CSS custom properties
 - **Content**: [MDX](https://mdxjs.com) with [Shiki](https://shiki.matsu.io) syntax highlighting
-- **Deployment**: [Vercel](https://vercel.com) with edge functions
-- **Analytics**: [Vercel Speed Insights](https://vercel.com/docs/speed-insights)
-- **Fonts**: Inter (sans-serif), Crimson Text (serif), JetBrains Mono (monospace)
+- **Deployment**: [Cloudflare Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/)
+- **Analytics**: [PostHog](https://posthog.com/)
+- **Fonts**: Plus Jakarta Sans and JetBrains Mono
 
 ## 📦 Installation & Development
 
@@ -33,7 +33,7 @@ Visit [sdburt.com](https://sdburt.com) to see the portfolio in action.
 git clone https://github.com/sdburt/astro-portfolio.git
 cd astro-portfolio
 
-# Install dependencies (requires Node.js 18+)
+# Install dependencies (requires Node.js 22.12+)
 pnpm install
 
 # Start development server
@@ -56,9 +56,17 @@ pnpm format
 
 # Lint code with Biome
 pnpm lint
+
+# Validate the Workers deployment without publishing
+pnpm deploy:dry-run
 ```
 
-The site is automatically deployed to Vercel on pushes to the main branch.
+The production build is deployed as an assets-only Cloudflare Worker. Configure a Workers Builds project with:
+
+- Build command: `pnpm build`
+- Deploy command: `pnpm wrangler deploy`
+
+Static files are uploaded from `dist/` according to `wrangler.toml`; there is no Worker script or server runtime.
 
 ## 📁 Project Structure
 
@@ -66,8 +74,6 @@ The site is automatically deployed to Vercel on pushes to the main branch.
 ├── public/                  # Static assets (favicon, images)
 ├── src/
 │   ├── components/         # Reusable UI components
-│   │   ├── ui/            # React Aria components
-│   │   ├── mdx/           # MDX-specific components
 │   │   └── *.astro        # Core site components
 │   ├── content/           # Content collections
 │   │   ├── blog/          # Blog posts (MDX)
@@ -80,7 +86,7 @@ The site is automatically deployed to Vercel on pushes to the main branch.
 │   └── config/            # Site configuration
 ├── astro.config.mjs       # Astro configuration
 ├── content.config.ts      # Content collections schema
-├── CLAUDE.md              # AI assistant context
+├── wrangler.toml          # Cloudflare Workers Static Assets configuration
 └── package.json
 ```
 
@@ -126,7 +132,7 @@ Key configuration files:
 - **Lighthouse Score**: 95+ across all categories
 - **Core Web Vitals**: Optimized for LCP, CLS, and FID
 - **Bundle Size**: Minimal JavaScript with selective hydration
-- **Image Optimization**: Automatic WebP conversion and responsive sizing
+- **Image Optimization**: Astro asset pipeline support for local images
 
 ## 🔐 Security
 
@@ -142,7 +148,7 @@ This portfolio implements comprehensive security measures:
 ### Security Files
 - **robots.txt**: Blocks crawlers from sensitive paths
 - **security.txt**: RFC 9116 compliant security disclosure information
-- **vercel.json**: Server-level security header configuration
+- **public/_headers**: Cloudflare static-asset security and cache headers
 
 ### Security Monitoring
 ```bash
@@ -160,7 +166,7 @@ pnpm run security:update
 - No user authentication or sensitive data storage
 - Static site generation for minimal attack surface
 - Dependency vulnerability scanning
-- Secure content delivery via Vercel edge network
+- Secure content delivery via Cloudflare's edge network
 - Regular security updates and monitoring
 
 ## 🤝 Contributing

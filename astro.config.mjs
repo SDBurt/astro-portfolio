@@ -1,12 +1,11 @@
 import { defineConfig } from "astro/config";
-import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
+import { unified } from "@astrojs/markdown-remark";
 import sitemap from "@astrojs/sitemap";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
@@ -28,15 +27,8 @@ export default defineConfig({
 
   compressHTML: true,
 
-  integrations: [
-    react(),
-    mdx({
-      optimize: true,
-      syntaxHighlight: "shiki",
-      shikiConfig: {
-        theme: "github-dark",
-        wrap: true,
-      },
+  markdown: {
+    processor: unified({
       remarkPlugins: [remarkGfm, remarkToc],
       rehypePlugins: [
         rehypeSlug,
@@ -52,7 +44,17 @@ export default defineConfig({
           },
         ],
       ],
-      gfm: true,
+    }),
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      theme: "github-dark",
+      wrap: true,
+    },
+  },
+
+  integrations: [
+    mdx({
+      optimize: true,
     }),
     sitemap({
       serialize(item) {
@@ -64,23 +66,11 @@ export default defineConfig({
     }),
   ],
 
-  adapter: cloudflare({
-    imageService: "compile",
-  }),
-
   vite: {
     build: {
       assetsInlineLimit: 2048,
       cssCodeSplit: true,
       sourcemap: false,
-    },
-    resolve: {
-      alias: {
-        'react-dom/server': 'react-dom/server.edge',
-      },
-    },
-    ssr: {
-      noExternal: ['react-aria-components'],
     },
   },
 });

@@ -1,37 +1,37 @@
 ---
 title: "Modern Astro Portfolio Website"
-description: "High-performance portfolio site built with Astro 5, React Aria, and vanilla CSS"
+description: "High-performance static portfolio built with Astro 7, MDX, and vanilla CSS"
 date: 2024-12-15
 draft: false
 demoURL: "https://sdburt.com"
 repoURL: "https://github.com/sdburt/astro-portfolio"
-tags: ["Astro", "React", "TypeScript", "CSS", "MDX", "Vercel", "Performance"]
+tags: ["Astro", "TypeScript", "CSS", "MDX", "Cloudflare", "Performance"]
 featured: true
 status: "completed"
 ---
 
 ## Overview
 
-A modern, performance-focused portfolio website showcasing my work as a software engineer. Built with cutting-edge web technologies and optimized for speed, accessibility, and developer experience. The site achieves perfect Lighthouse scores while maintaining clean, maintainable code.
+A modern, performance-focused portfolio website showcasing my work as a software engineer. It is optimized for speed, accessibility, and developer experience while keeping the implementation small and maintainable.
 
 ## Technical Architecture
 
 ### Framework Choice
-- **Astro 5.11**: Leveraging the latest stable content layer and islands architecture
-- **React 19**: Used selectively for interactive components with React Aria
+- **Astro 7**: Rust-powered builds, the Content Layer API, and static-first architecture
+- **Astro components**: No client framework runtime or hydrated UI islands
 - **TypeScript**: Strict type safety across the entire codebase
 - **Vanilla CSS**: Custom design system with CSS custom properties for optimal performance
 
 ### Performance Optimizations
 - **Zero JavaScript by default**: Static HTML generation with selective hydration
-- **Image optimization**: Automatic WebP conversion and responsive sizing
+- **Asset optimization**: Hashed static assets with long-lived cache headers
 - **Font optimization**: Preloaded critical fonts with display swap
 - **Bundle optimization**: Tree shaking and selective component loading
 
 ## Key Features
 
 ### Accessibility First
-- **React Aria Components**: Industry-leading accessibility patterns
+- **Semantic components**: Native HTML controls and landmarks wherever possible
 - **Skip navigation**: Keyboard navigation support
 - **Screen reader optimized**: Semantic HTML with proper ARIA labels
 - **Color contrast**: WCAG AA compliance across all themes
@@ -40,7 +40,7 @@ A modern, performance-focused portfolio website showcasing my work as a software
 - **MDX Support**: Enhanced markdown with custom components
 - **Syntax Highlighting**: Shiki integration with GitHub Dark theme
 - **Content Collections**: Type-safe frontmatter with Zod validation
-- **Related Posts**: Automatic content discovery based on tags
+- **Feeds and discovery**: Generated RSS and sitemap output
 
 ### Developer Experience
 - **Hot Module Replacement**: Instant development feedback
@@ -50,21 +50,16 @@ A modern, performance-focused portfolio website showcasing my work as a software
 
 ## Performance Results
 
-### Lighthouse Scores
-- **Performance**: 100/100
-- **Accessibility**: 100/100  
-- **Best Practices**: 100/100
-- **SEO**: 100/100
-
-### Core Web Vitals
-- **Largest Contentful Paint**: < 1.2s
-- **First Input Delay**: < 100ms
-- **Cumulative Layout Shift**: < 0.1
+### Quality Targets
+- **Performance**: Static HTML and minimal client JavaScript
+- **Accessibility**: Semantic markup, keyboard navigation, and reduced-motion support
+- **Best Practices**: Strict TypeScript, security headers, and dependency checks
+- **SEO**: Structured data, canonical URLs, RSS, and generated sitemaps
 
 ### Bundle Analysis
-- **Initial JS Bundle**: < 50KB gzipped
+- **Client framework bundle**: None
 - **Critical CSS**: Inlined for instant rendering
-- **Image Optimization**: 60% size reduction with WebP
+- **Deployment artifact**: Static assets only; no Worker server bundle
 
 ## Technical Challenges Solved
 
@@ -78,10 +73,10 @@ A modern, performance-focused portfolio website showcasing my work as a software
 - **Solution**: Updated to new content layer API and ClientRouter
 - **Result**: Improved build performance and simplified content management
 
-### Accessibility Implementation
-- **Challenge**: Maintaining complex interactions while ensuring full accessibility
-- **Solution**: React Aria Components with comprehensive testing
-- **Result**: WCAG AA compliance with improved user experience
+### Astro 5 to 7 Migration
+- **Challenge**: Updating the content, Markdown, Vite, and deployment contracts across two major versions
+- **Solution**: Migrated through Astro 6 first, moved plugins to the shared unified processor, and removed unused runtime integrations
+- **Result**: Faster builds, fewer dependencies, and an assets-only deployment
 
 ## Content Strategy
 
@@ -109,31 +104,31 @@ A modern, performance-focused portfolio website showcasing my work as a software
 
 ## Deployment & Infrastructure
 
-### Vercel Integration
-- **Edge Functions**: Serverless API routes for dynamic features
-- **Image Optimization**: Automatic format conversion and sizing
-- **Speed Insights**: Real-time performance monitoring
-- **Preview Deployments**: Automated testing for pull requests
+### Cloudflare Workers Static Assets
+- **Static asset serving**: HTML, CSS, fonts, and images are served directly from Cloudflare's edge
+- **No server runtime**: The site does not deploy an unnecessary Worker script or session binding
+- **Security headers**: `_headers` rules deploy with the static asset bundle
+- **Future-ready**: Worker APIs can be added later without moving platforms again
 
 ### CI/CD Pipeline
-- **Automated Testing**: Type checking and build validation
-- **Performance Budgets**: Automated Lighthouse CI checks
-- **Dependency Updates**: Automated security and feature updates
+- **Build validation**: Astro diagnostics and production generation run together
+- **Code quality**: Biome linting and pre-commit build checks
+- **Reproducible installs**: Frozen pnpm lockfile in Cloudflare Workers Builds
 
 ## Technical Stack
 
-**Framework**: Astro 5.11, React 19, TypeScript 5.8
+**Framework**: Astro 7, TypeScript
 **Styling**: Vanilla CSS, CSS Custom Properties, PostCSS
 **Content**: MDX, Shiki, Remark/Rehype plugins
-**Deployment**: Vercel, Edge Functions, Speed Insights
+**Deployment**: Cloudflare Workers Static Assets
 **Development**: Biome, Git Hooks, VS Code Extensions
-**Analytics**: Vercel Analytics, Core Web Vitals monitoring
+**Analytics**: PostHog
 
 ## Open Source Contributions
 
 This portfolio serves as a reference implementation for:
 - Modern Astro development patterns
-- Accessibility-first React component libraries
+- Static-first Astro component architecture
 - Performance optimization techniques
 - Content-driven website architecture
 

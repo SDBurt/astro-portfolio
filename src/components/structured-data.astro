@@ -18,7 +18,7 @@ const {
   title = SITE.NAME,
   description = HOME.DESCRIPTION,
   image = "/nano.png",
-  url = new URL((Astro.url.pathname.replace(/\/+$/, "") || "/"), Astro.site).href,
+  url = new URL(Astro.url.pathname.replace(/\/+$/, "") || "/", Astro.site).href,
   datePublished,
   dateModified,
   author = "Sean Burt",
@@ -28,9 +28,12 @@ const {
 const baseUrl = Astro.site?.href || "https://sdburt.com";
 const imageUrl = new URL(image, baseUrl).href;
 
-let structuredData: any = {
+type JsonLd = Record<string, unknown>;
+
+let structuredData: JsonLd = {
   "@context": "https://schema.org",
-  "@type": type === "website" ? "WebSite" : type === "article" ? "BlogPosting" : type === "person" ? "Person" : "CreativeWork",
+  "@type":
+    type === "website" ? "WebSite" : type === "article" ? "BlogPosting" : type === "person" ? "Person" : "CreativeWork",
   name: title,
   description,
   url,
@@ -48,8 +51,8 @@ if (type === "website") {
       jobTitle: "Software Engineer",
       worksFor: {
         "@type": "Organization",
-        name: "Consumer Genius"
-      }
+        name: "Consumer Genius",
+      },
     },
   };
 } else if (type === "article") {
@@ -61,18 +64,18 @@ if (type === "website") {
     author: {
       "@type": "Person",
       name: author,
-      url: baseUrl
+      url: baseUrl,
     },
     publisher: {
       "@type": "Person",
       name: author,
-      url: baseUrl
+      url: baseUrl,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": url
+      "@id": url,
     },
-    keywords: tags.join(", ")
+    keywords: tags.join(", "),
   };
 } else if (type === "person") {
   structuredData = {
@@ -83,11 +86,11 @@ if (type === "website") {
     jobTitle: "Software Engineer",
     worksFor: {
       "@type": "Organization",
-      name: "Consumer Genius"
+      name: "Consumer Genius",
     },
     alumniOf: {
       "@type": "EducationalOrganization",
-      name: "University of Victoria"
+      name: "University of Victoria",
     },
     knowsAbout: [
       "Software Engineering",
@@ -95,12 +98,9 @@ if (type === "website") {
       "Data Engineering",
       "Web Development",
       "AI",
-      "Data Science"
+      "Data Science",
     ],
-    sameAs: [
-      "https://github.com/SDBurt",
-      "https://linkedin.com/in/seandburt"
-    ]
+    sameAs: ["https://github.com/SDBurt", "https://linkedin.com/in/seandburt"],
   };
 }
 
@@ -110,12 +110,10 @@ structuredData = JSON.parse(JSON.stringify(structuredData));
 // Build BreadcrumbList for nested pages
 const pathname = Astro.url.pathname;
 const segments = pathname.split("/").filter(Boolean);
-let breadcrumbData: any = null;
+let breadcrumbData: JsonLd | null = null;
 
 if (segments.length > 0) {
-  const items = [
-    { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
-  ];
+  const items = [{ "@type": "ListItem", position: 1, name: "Home", item: baseUrl }];
 
   for (let i = 0; i < segments.length; i++) {
     const isLast = i === segments.length - 1;
