@@ -36,7 +36,7 @@ const projects = (await getCollection("projects"))
           that detects wildfires from drone imagery and creates geo-referenced pdf maps.
         </p>
         <div class="hero__actions">
-          <a class="button" href={`mailto:${SITE.EMAIL}`}>Email me</a>
+          <a class="button" href={`mailto:${SITE.EMAIL}`} data-copy-email={SITE.EMAIL}>Email me</a>
           <a class="text-link" href="/about">About me</a>
         </div>
       </div>
@@ -171,3 +171,37 @@ const projects = (await getCollection("projects"))
     }
   }
 </style>
+
+<script>
+  // A mailto link does nothing in browsers with no mail handler, so copy the
+  // address and confirm it on the button. Delegated so it survives the
+  // view-transition swaps where this script is not re-run.
+  const timers = new WeakMap<HTMLElement, number>();
+
+  document.addEventListener("click", async (event) => {
+    const target = event.target as HTMLElement | null;
+    const button = target?.closest<HTMLAnchorElement>("[data-copy-email]");
+    const email = button?.dataset.copyEmail;
+    if (!button || !email || !navigator.clipboard) return;
+
+    try {
+      await navigator.clipboard.writeText(email);
+    } catch {
+      return;
+    }
+
+    button.dataset.label ??= button.textContent ?? "";
+    button.textContent = "Copied!";
+
+    const existing = timers.get(button);
+    if (existing) window.clearTimeout(existing);
+
+    timers.set(
+      button,
+      window.setTimeout(() => {
+        button.textContent = button.dataset.label ?? "";
+        timers.delete(button);
+      }, 2000)
+    );
+  });
+</script>
