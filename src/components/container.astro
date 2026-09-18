@@ -1,7 +1,11 @@
 ---
+type Props = {
+  wide?: boolean;
+};
 
+const { wide = false } = Astro.props;
 ---
 
-<div class="container relative">
+<div class:list={["container", "relative", wide && "container--wide"]}>
   <slot />
 </div>

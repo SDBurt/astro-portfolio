@@ -1,0 +1,56 @@
+---
+import { type CollectionEntry, render } from "astro:content";
+import { dateRange } from "@/lib/utils";
+
+type Props = {
+  entries: CollectionEntry<"work">[];
+  /** Render each role's bullet points under it */
+  detailed?: boolean;
+};
+
+const { entries, detailed = false } = Astro.props;
+
+const work = await Promise.all(
+  entries.map(async (entry) => ({
+    entry,
+    Content: detailed ? (await render(entry)).Content : undefined,
+  }))
+);
+---
+
+<ul class="rows">
+  {
+    work.map(({ entry, Content }) => (
+      <li class="row">
+        <span class="row__title">{entry.data.company}</span>
+        <span class="row__desc">{entry.data.role}</span>
+        <span class="row__meta">{dateRange(entry.data.dateStart, entry.data.dateEnd)}</span>
+        {Content && (
+          <div class="timeline__content">
+            <Content />
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .timeline__content {
+    grid-column: 1 / -1;
+    margin-top: 0.6rem;
+    max-width: 42rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-muted-foreground);
+  }
+
+  .timeline__content :global(ul) {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .timeline__content :global(li + li) {
+    margin-top: 0.25rem;
+  }
+</style>

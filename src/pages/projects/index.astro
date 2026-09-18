@@ -2,7 +2,8 @@
 import { getCollection } from "astro:content";
 import PageLayout from "@/layouts/page-layout.astro";
 import Container from "@/components/container.astro";
-import SimpleLink from "@/components/simple-link.astro";
+import EntryRows from "@/components/entry-rows.astro";
+import PageIntro from "@/components/page-intro.astro";
 import { PROJECTS } from "@/config/site";
 
 const projects = (await getCollection("projects"))
@@ -11,20 +12,8 @@ const projects = (await getCollection("projects"))
 ---
 
 <PageLayout title={PROJECTS.TITLE} description={PROJECTS.DESCRIPTION}>
-  <Container>
-    <div class="space-y-10">
-      <h1 class="font-bold text-primary dark:text-white">
-        {PROJECTS.TITLE}
-      </h1>
-      <ul class="flex flex-col list-none space-y-4">
-        {
-          projects.map((project) => (
-            <li>
-              <SimpleLink entry={project} />
-            </li>
-          ))
-        }
-      </ul>
-    </div>
+  <Container wide>
+    <PageIntro title={PROJECTS.TITLE} />
+    <EntryRows entries={projects} date="year" />
   </Container>
 </PageLayout>

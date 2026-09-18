@@ -1,0 +1,57 @@
+---
+import Container from "@/components/container.astro";
+import PageLayout from "@/layouts/page-layout.astro";
+import { SITE, NAV } from "@/config/site";
+---
+
+<PageLayout
+  title="Page not found"
+  description={`That page does not exist on ${SITE.NAME}.`}
+>
+  <Container>
+    <header class="not-found">
+      <p class="not-found__code">404</p>
+      <h1 class="page-title">This page does not exist</h1>
+      <p class="not-found__lede">
+        The link may be out of date, or the page may have moved. Here is
+        everything else on the site:
+      </p>
+    </header>
+
+    <ul class="rows">
+      {
+        NAV.map((item) => (
+          <li>
+            <a class="row" href={item.HREF}>
+              <span class="row__title">{item.LABEL}</span>
+              <span class="row__desc">
+                {item.HREF === "/" ? "Start here" : `Everything under ${item.HREF}`}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</PageLayout>
+
+<style>
+  .not-found {
+    max-width: 42rem;
+    margin-bottom: var(--section-gap);
+  }
+
+  .not-found__code {
+    font-family: var(--font-family-mono);
+    font-size: 0.875rem;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-muted-foreground);
+  }
+
+  .not-found__lede {
+    margin-top: 1rem;
+    font-family: var(--font-family-serif);
+    font-size: clamp(1.15rem, 1rem + 0.4vw, 1.3rem);
+    color: var(--color-muted-foreground);
+  }
+</style>

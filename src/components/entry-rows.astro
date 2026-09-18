@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+  entries: (CollectionEntry<"blog"> | CollectionEntry<"projects">)[];
+  /** "year" for project lists, "month" for writing */
+  date?: "year" | "month";
+};
+
+const { entries, date = "month" } = Astro.props;
+
+const formatDate = (d: Date) =>
+  date === "year"
+    ? String(d.getFullYear())
+    : d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+---
+
+<ul class="rows">
+  {
+    entries.map((entry) => (
+      <li>
+        <a class="row" href={`/${entry.collection}/${entry.id}`}>
+          <span class="row__title">{entry.data.title}</span>
+          <span class="row__desc">{entry.data.description}</span>
+          <span class="row__meta">{formatDate(entry.data.date)}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

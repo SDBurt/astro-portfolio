@@ -1,6 +1,6 @@
 # Sean Burt - Portfolio & Blog
 
-A modern, performance-focused portfolio website built with Astro 5, showcasing software engineering projects and technical writing.
+A modern, performance-focused portfolio website built with Astro, showcasing software engineering projects and technical writing.
 
 ## 🚀 Live Site
 
@@ -8,21 +8,21 @@ Visit [sdburt.com](https://www.sdburt.com) to see the portfolio in action.
 
 ## ✨ Features
 
-- **Modern Stack**: Astro 5.11 with React 19 and TypeScript
-- **Accessible Design**: React Aria Components with comprehensive ARIA support
+- **Modern Stack**: Astro 7 with TypeScript and no UI framework
+- **Accessible Design**: Native disclosure patterns with focus management and proper ARIA state
 - **Performance Optimized**: Vanilla CSS design system, image optimization, and Vercel Speed Insights
-- **Content Management**: MDX with syntax highlighting, automatic table of contents, and enhanced plugins
+- **Content Management**: MDX with syntax highlighting and enhanced plugins
 - **SEO Ready**: Structured data, Open Graph tags, and automatic sitemap generation
 - **Dark Mode**: System preference detection with manual toggle
 - **Fast Navigation**: Prefetching and view transitions for smooth UX
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Astro 5.11](https://astro.build) - Static site generator with islands architecture
-- **UI Components**: [React 19](https://react.dev) with [React Aria Components](https://react-spectrum.adobe.com/react-aria/)
+- **Framework**: [Astro 7](https://astro.build) - Static site generator with content collections and view transitions
+- **Interactivity**: Vanilla TypeScript progressive enhancement
 - **Styling**: Vanilla CSS with custom design system and CSS custom properties
 - **Content**: [MDX](https://mdxjs.com) with [Shiki](https://shiki.matsu.io) syntax highlighting
-- **Deployment**: [Vercel](https://vercel.com) with edge functions
+- **Deployment**: [Vercel](https://vercel.com)
 - **Analytics**: [Vercel Speed Insights](https://vercel.com/docs/speed-insights)
 - **Fonts**: Inter (sans-serif), Crimson Text (serif), JetBrains Mono (monospace)
 
@@ -33,7 +33,7 @@ Visit [sdburt.com](https://www.sdburt.com) to see the portfolio in action.
 git clone https://github.com/sdburt/astro-portfolio.git
 cd astro-portfolio
 
-# Install dependencies (requires Node.js 18+)
+# Install dependencies (requires Node.js 22+)
 pnpm install
 
 # Start development server
@@ -65,10 +65,7 @@ The site is automatically deployed to Vercel on pushes to the main branch.
 ```
 ├── public/                  # Static assets (favicon, images)
 ├── src/
-│   ├── components/         # Reusable UI components
-│   │   ├── ui/            # React Aria components
-│   │   ├── mdx/           # MDX-specific components
-│   │   └── *.astro        # Core site components
+│   ├── components/         # Reusable UI components (Astro)
 │   ├── content/           # Content collections
 │   │   ├── blog/          # Blog posts (MDX)
 │   │   ├── projects/      # Project showcases
@@ -79,8 +76,6 @@ The site is automatically deployed to Vercel on pushes to the main branch.
 │   ├── lib/               # Utility functions
 │   └── config/            # Site configuration
 ├── astro.config.mjs       # Astro configuration
-├── content.config.ts      # Content collections schema
-├── CLAUDE.md              # AI assistant context
 └── package.json
 ```
 
@@ -88,9 +83,9 @@ The site is automatically deployed to Vercel on pushes to the main branch.
 
 The site uses a custom vanilla CSS design system with:
 
-- **Color System**: Primary blue (#3b82f6) with semantic color tokens
+- **Color System**: Bone paper and forest ink with matcha accents, as semantic color tokens
 - **Typography Scale**: Consistent sizing with rem units
-- **Spacing System**: 4px-based spacing scale
+- **Spacing System**: rem-based spacing scale
 - **Component Classes**: Semantic CSS classes for consistency
 - **Dark Mode**: CSS custom properties with system preference detection
 
@@ -118,14 +113,14 @@ Key configuration files:
 
 - `src/config/site.ts` - Site metadata, navigation, and social links
 - `astro.config.mjs` - Astro framework configuration
-- `content.config.ts` - Content collection schemas
+- `src/content.config.ts` - Content collection schemas
 - `biome.json` - Code formatting and linting rules
 
 ## 📊 Performance
 
 - **Lighthouse Score**: 95+ across all categories
 - **Core Web Vitals**: Optimized for LCP, CLS, and FID
-- **Bundle Size**: Minimal JavaScript with selective hydration
+- **Bundle Size**: Minimal JavaScript, static HTML with progressive enhancement
 - **Image Optimization**: Automatic WebP conversion and responsive sizing
 
 ## 🔐 Security
@@ -180,7 +175,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 📞 Contact
 
 - **Email**: seandburt@gmail.com
-- **LinkedIn**: [sean-d-burt](https://linkedin.com/in/sean-d-burt)
+- **LinkedIn**: [seandburt](https://www.linkedin.com/in/seandburt)
 - **GitHub**: [sdburt](https://github.com/sdburt)
 
 ---

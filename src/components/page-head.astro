@@ -1,17 +1,21 @@
 ---
-import "../styles/globals.css";
+import "../styles/design-system.css";
 import "@fontsource/inter/latin-400.css";
 import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
 import "@fontsource/crimson-text/latin-400.css";
+import "@fontsource/crimson-text/latin-400-italic.css";
 import "@fontsource/crimson-text/latin-600.css";
+import "@fontsource/crimson-text/latin-700.css";
 import "@fontsource/jetbrains-mono/latin-400.css";
 import inter400 from "@fontsource/inter/files/inter-latin-400-normal.woff2";
 import inter500 from "@fontsource/inter/files/inter-latin-500-normal.woff2";
 import inter600 from "@fontsource/inter/files/inter-latin-600-normal.woff2";
 import crimson400 from "@fontsource/crimson-text/files/crimson-text-latin-400-normal.woff2";
+import crimson700 from "@fontsource/crimson-text/files/crimson-text-latin-700-normal.woff2";
 import jetbrains400 from "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2";
 import { ClientRouter } from "astro:transitions";
+import { FEED, OG_IMAGE } from "@/config/site";
 
 export interface Props {
   title: string;
@@ -21,7 +25,7 @@ export interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = "/nano.png" } = Astro.props;
+const { title, description, image = OG_IMAGE } = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -30,48 +34,17 @@ const { title, description, image = "/nano.png" } = Astro.props;
 
 <!-- Apply theme immediately to prevent FOUC -->
 <script is:inline>
-  // Inject critical CSS immediately
+  // Set the theme class before first paint. The stylesheet is render-blocking,
+  // so this alone prevents a flash; never hide the body, or a script failure
+  // leaves the page blank.
   (function() {
-    // Add critical CSS to prevent FOUC
-    const style = document.createElement('style');
-    style.textContent = `
-      /* Hide body until theme is loaded to prevent FOUC */
-      html:not([data-theme]) body {
-        visibility: hidden;
-        opacity: 0;
-      }
-      
-      /* Critical theme variables for immediate rendering */
-      html {
-        --color-background: hsl(0, 0%, 100%);
-        --color-foreground: hsl(20, 14.3%, 4.1%);
-      }
-      
-      html.dark {
-        --color-background: hsl(20, 14.3%, 4.1%);
-        --color-foreground: hsl(60, 9.1%, 97.8%);
-      }
-      
-      /* Show content once theme is set */
-      html[data-theme] body {
-        visibility: visible;
-        opacity: 1;
-      }
-      
-      /* Ensure smooth transition when revealing content */
-      body {
-        transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out;
-      }
-    `;
-    document.head.appendChild(style);
-    
-    // Apply theme
     const theme = localStorage.getItem('theme') || 'system';
     const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     document.documentElement.setAttribute('data-theme', theme);
     if (isDark) {
       document.documentElement.classList.add('dark');
     }
+
   })();
 </script>
 
@@ -84,10 +57,17 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <link rel="manifest" href="/site.webmanifest" />
 
 <link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={FEED.TITLE}
+  href={new URL("rss.xml", Astro.site)}
+/>
 <meta name="generator" content={Astro.generator} />
 <meta name="robots" content="index, follow">
 
 <!-- Critical font preloads -->
+<link rel="preload" href={crimson700} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={inter400} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={inter500} as="font" type="font/woff2" crossorigin />
 <!-- Other fonts loaded on demand -->
@@ -131,8 +111,8 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <meta name="twitter:image:alt" content={title} />
 
 <!-- Additional SEO tags -->
-<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#f0f0e6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)" />
 <meta name="color-scheme" content="light dark" />
 
 <!-- Performance hints -->
@@ -148,12 +128,8 @@ const { title, description, image = "/nano.png" } = Astro.props;
 <!-- Resource hints for better loading -->
 <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
-<!-- Security Headers -->
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload">
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+<!-- Security headers: only CSP is honoured in a meta tag; the rest are sent
+     as real response headers from vercel.json -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://vercel.live https://vitals.vercel-insights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vitals.vercel-insights.com https://vercel.live; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 
 
@@ -172,6 +148,9 @@ const { title, description, image = "/nano.png" } = Astro.props;
 
 <script is:inline>
   function init() {
+    // A view transition swap strips every attribute off <html> and will not
+    // re-run this inline script, so the JS-only flags are re-applied here.
+    document.documentElement.classList.add("js-ready", "nav-collapsible");
     preloadTheme();
     onScroll();
 
@@ -182,17 +161,20 @@ const { title, description, image = "/nano.png" } = Astro.props;
     backToPrev?.addEventListener("click", () => window.history.back());
 
     // Theme button handling is now in theme-toggle.astro component
-
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (event) => {
-        if (localStorage.theme === "system") {
-          toggleTheme(event.matches);
-        }
-      });
-
-    document.addEventListener("scroll", onScroll);
   }
+
+  // Registered once, outside the re-entrant init: a fresh MediaQueryList per
+  // navigation cannot be de-duplicated, and a document-level listener survives
+  // the swap, so both would stack up on every navigation.
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (event) => {
+      if (localStorage.theme === "system") {
+        toggleTheme(event.matches);
+      }
+    });
+
+  document.addEventListener("scroll", onScroll, { passive: true });
 
 
   function onScroll() {

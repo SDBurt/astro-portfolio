@@ -29,27 +29,31 @@
 </button>
 
 <style>
+  /* Hidden until JS is confirmed, since the button is inert without it */
   .theme-toggle-button {
+    display: none;
     position: relative;
-    width: 36px;
-    height: 36px;
-    padding: var(--spacing-xs);
-    border-radius: var(--radius-md);
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border-radius: var(--radius-lg);
     background-color: transparent;
     border: 1px solid var(--color-border);
     color: var(--color-muted-foreground);
     transition: all 150ms ease-in-out;
     cursor: pointer;
-    display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
 
+  :global(html.js-ready) .theme-toggle-button {
+    display: flex;
+  }
+
   .theme-toggle-button:hover {
-    background-color: var(--color-muted);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    border-color: var(--color-brand);
+    color: var(--color-brand);
   }
 
   .theme-toggle-button svg {
@@ -68,18 +72,6 @@
   :root.dark .theme-toggle-button .moon-icon {
     opacity: 1;
     transform: scale(1);
-  }
-
-  /* System theme detection */
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) .theme-toggle-button .moon-icon {
-      opacity: 1;
-      transform: scale(1);
-    }
-    :root:not([data-theme]) .theme-toggle-button .sun-icon {
-      opacity: 0;
-      transform: scale(0.8);
-    }
   }
 
   /* When theme is set to system */
@@ -120,20 +112,31 @@
       localStorage.setItem('theme', theme);
     }
 
+    function updateLabel(theme: string) {
+      const label = `Theme: ${theme}. Switch to ${getNextTheme(theme)}`;
+      button?.setAttribute('aria-label', label);
+      button?.setAttribute('title', label);
+    }
+
+    updateLabel(localStorage.getItem('theme') || 'system');
+
     button.addEventListener('click', () => {
       const currentTheme = localStorage.getItem('theme') || 'system';
       const nextTheme = getNextTheme(currentTheme);
       applyTheme(nextTheme);
+      updateLabel(nextTheme);
     });
 
-    // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      const theme = localStorage.getItem('theme') || 'system';
-      if (theme === 'system') {
-        document.documentElement.classList.toggle('dark', e.matches);
-      }
-    });
   }
+
+  // Registered once, outside the re-entrant init: a fresh MediaQueryList per
+  // navigation cannot be de-duplicated by addEventListener.
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const theme = localStorage.getItem('theme') || 'system';
+    if (theme === 'system') {
+      document.documentElement.classList.toggle('dark', e.matches);
+    }
+  });
 
   // Initialize on load and after navigation
   document.addEventListener('DOMContentLoaded', initThemeToggle);

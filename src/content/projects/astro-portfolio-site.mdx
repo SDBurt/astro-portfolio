@@ -1,11 +1,11 @@
 ---
 title: "Modern Astro Portfolio Website"
-description: "High-performance portfolio site built with Astro 5, React Aria, and vanilla CSS"
+description: "High-performance portfolio site built with Astro and vanilla CSS"
 date: 2024-12-15
 draft: false
 demoURL: "https://www.sdburt.com"
 repoURL: "https://github.com/sdburt/astro-portfolio"
-tags: ["Astro", "React", "TypeScript", "CSS", "MDX", "Vercel", "Performance"]
+tags: ["Astro", "TypeScript", "CSS", "MDX", "Vercel", "Performance"]
 featured: true
 status: "completed"
 ---
@@ -17,13 +17,13 @@ A modern, performance-focused portfolio website showcasing my work as a software
 ## Technical Architecture
 
 ### Framework Choice
-- **Astro 5.11**: Leveraging the latest stable content layer and islands architecture
-- **React 19**: Used selectively for interactive components with React Aria
+- **Astro**: Content collections, view transitions, and static generation
+- **Vanilla TypeScript**: Progressive-enhancement scripts, no UI framework
 - **TypeScript**: Strict type safety across the entire codebase
 - **Vanilla CSS**: Custom design system with CSS custom properties for optimal performance
 
 ### Performance Optimizations
-- **Zero JavaScript by default**: Static HTML generation with selective hydration
+- **Zero JavaScript by default**: Static HTML enhanced with small progressive-enhancement scripts
 - **Image optimization**: Automatic WebP conversion and responsive sizing
 - **Font optimization**: Preloaded critical fonts with display swap
 - **Bundle optimization**: Tree shaking and selective component loading
@@ -31,7 +31,7 @@ A modern, performance-focused portfolio website showcasing my work as a software
 ## Key Features
 
 ### Accessibility First
-- **React Aria Components**: Industry-leading accessibility patterns
+- **Native disclosure patterns**: Focus management and ARIA state on the mobile menu
 - **Skip navigation**: Keyboard navigation support
 - **Screen reader optimized**: Semantic HTML with proper ARIA labels
 - **Color contrast**: WCAG AA compliance across all themes
@@ -40,7 +40,6 @@ A modern, performance-focused portfolio website showcasing my work as a software
 - **MDX Support**: Enhanced markdown with custom components
 - **Syntax Highlighting**: Shiki integration with GitHub Dark theme
 - **Content Collections**: Type-safe frontmatter with Zod validation
-- **Related Posts**: Automatic content discovery based on tags
 
 ### Developer Experience
 - **Hot Module Replacement**: Instant development feedback
@@ -73,14 +72,14 @@ A modern, performance-focused portfolio website showcasing my work as a software
 - **Solution**: Built comprehensive design system with semantic CSS classes
 - **Result**: 40% reduction in CSS bundle size with improved maintainability
 
-### Astro 4 to 5 Migration
-- **Challenge**: Breaking changes in content collections and view transitions
-- **Solution**: Updated to new content layer API and ClientRouter
-- **Result**: Improved build performance and simplified content management
+### Astro 5 to 7 Migration
+- **Challenge**: Two major versions of breaking changes, plus dropping the React integration
+- **Solution**: Moved to the current content layer API and rewrote the interactive bits as vanilla scripts
+- **Result**: Improved build performance and a much smaller dependency tree
 
 ### Accessibility Implementation
 - **Challenge**: Maintaining complex interactions while ensuring full accessibility
-- **Solution**: React Aria Components with comprehensive testing
+- **Solution**: Native disclosure patterns with keyboard focus management
 - **Result**: WCAG AA compliance with improved user experience
 
 ## Content Strategy
@@ -122,8 +121,8 @@ A modern, performance-focused portfolio website showcasing my work as a software
 
 ## Technical Stack
 
-**Framework**: Astro 5.11, React 19, TypeScript 5.8
-**Styling**: Vanilla CSS, CSS Custom Properties, PostCSS
+**Framework**: Astro 7, TypeScript 5.8
+**Styling**: Vanilla CSS, CSS Custom Properties
 **Content**: MDX, Shiki, Remark/Rehype plugins
 **Deployment**: Vercel, Edge Functions, Speed Insights
 **Development**: Biome, Git Hooks, VS Code Extensions
@@ -133,7 +132,7 @@ A modern, performance-focused portfolio website showcasing my work as a software
 
 This portfolio serves as a reference implementation for:
 - Modern Astro development patterns
-- Accessibility-first React component libraries
+- Accessibility-first progressive enhancement
 - Performance optimization techniques
 - Content-driven website architecture
 

@@ -1,15 +1,3 @@
-export function cn(...inputs: (string | undefined | null | false)[]): string {
-  return inputs.filter(Boolean).join(" ");
-}
-
-export function formatDate(date: Date) {
-  return Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric"
-  }).format(date);
-}
-
 export function readingTime(html: string) {
   const textOnly = html.replace(/<[^>]+>/g, "");
   const wordCount = textOnly.split(/\s+/).length;
@@ -20,8 +8,8 @@ export function readingTime(html: string) {
 export function dateRange(startDate: Date, endDate?: Date | string): string {
   const startMonth = startDate.toLocaleString("default", { month: "short" });
   const startYear = startDate.getFullYear().toString();
-  let endMonth;
-  let endYear;
+  let endMonth = "";
+  let endYear = "";
 
   if (endDate) {
     if (typeof endDate === "string") {
@@ -33,5 +21,7 @@ export function dateRange(startDate: Date, endDate?: Date | string): string {
     }
   }
 
-  return `${startMonth}${startYear} - ${endMonth}${endYear}`;
+  const start = `${startMonth} ${startYear}`;
+  if (!endYear) return `${start} – Present`;
+  return `${start} – ${[endMonth, endYear].filter(Boolean).join(" ")}`;
 }

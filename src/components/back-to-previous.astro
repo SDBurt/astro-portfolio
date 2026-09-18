@@ -1,13 +1,13 @@
 ---
+type Props = {
+  href: string;
+};
+
 const { href } = Astro.props;
 ---
 
-<a
-  href={href}
-  class="back-to-previous-link"
-  aria-label="Go back to previous page"
->
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<a href={href} class="back-link quiet-link">
+  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M19 12H5"/>
     <path d="M12 19l-7-7 7-7"/>
   </svg>
@@ -15,30 +15,9 @@ const { href } = Astro.props;
 </a>
 
 <style>
-.back-to-previous-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  color: var(--color-muted-foreground);
-  text-decoration: none;
-  padding: var(--spacing-sm) 0;
-  transition: color 0.2s ease;
-  margin-bottom: var(--spacing-xl);
-}
-
-.back-to-previous-link:hover {
-  color: var(--color-primary);
-}
-
-.back-to-previous-link svg {
-  flex-shrink: 0;
-}
-
-@media (max-width: 640px) {
-  .back-to-previous-link {
-    font-size: var(--font-size-xs);
-    gap: var(--spacing-xs);
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
   }
-}
 </style>

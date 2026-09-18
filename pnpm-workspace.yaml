@@ -1,0 +1,6 @@
+allowBuilds:
+  '@vercel/speed-insights': true
+  esbuild: true
+  sharp: true
+minimumReleaseAgeExclude:
+  - astro@7.3.3
