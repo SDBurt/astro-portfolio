@@ -33,13 +33,14 @@ export default defineConfig({
       rehypePlugins: [
         rehypeSlug,
         [
+          // `wrap` turns the heading text itself into the permalink, so the
+          // link must not be hidden from assistive tech or removed from the
+          // tab order.
           rehypeAutolinkHeadings,
           {
             behavior: "wrap",
             properties: {
               className: ["anchor-link"],
-              ariaHidden: true,
-              tabIndex: -1,
             },
           },
         ],

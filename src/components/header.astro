@@ -1,73 +1,305 @@
 ---
 import Container from "@/components/container.astro";
-import Link from "@/components/link.astro";
-import { SITE } from "@/config/site";
+import ThemeToggle from "@/components/theme-toggle.astro";
+import { SITE, NAV } from "@/config/site";
 
-const pathname = Astro.url.pathname;
-
-function isActive(href: string): boolean {
-  if (href === "/") return pathname === "/";
-  return pathname.startsWith(href);
-}
-
-const navLinks = [
-  { href: "/", label: "home" },
-  { href: "/work", label: "work" },
-  { href: "/projects", label: "projects" },
-  { href: "/blog", label: "blog" },
-  { href: "/about", label: "about" },
-];
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
 ---
 
-<header
-  class="fixed top-0 left-0 right-0 z-50 py-5 bg-background/75 dark:bg-background/25 backdrop-blur-sm saturate-200"
->
-  <Container>
-    <div class="flex flex-wrap gap-y-2 justify-between items-center">
-      <Link href="/" underline={false}>
-        <div class="header-name">
-          {SITE.NAME}
-        </div>
-      </Link>
-      <nav class="flex gap-1 items-center">
-        {navLinks.map((link) => (
-          <a
-            href={link.href}
-            class:list={["nav-link", { "nav-link--active": isActive(link.href) }]}
-            {...(isActive(link.href) ? { "aria-current": "page" } : {})}
-          >
-            {link.label}
-          </a>
-        ))}
+<header class="site-header">
+  <Container wide>
+    <div class="site-header__inner">
+      <a href="/" class="site-header__brand">{SITE.NAME}</a>
+
+      <div class="site-header__actions">
+        <ThemeToggle />
+      </div>
+
+      <button
+        class="site-header__burger"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span class="site-header__burger-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <nav class="site-header__nav" id="site-nav" aria-label="Main">
+        {
+          NAV.map((item) => (
+            <a
+              href={item.HREF}
+              class="site-header__link"
+              aria-current={isActive(item.HREF) ? "page" : undefined}
+            >
+              {item.LABEL}
+            </a>
+          ))
+        }
       </nav>
     </div>
   </Container>
 </header>
 
 <style>
-.header-name {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-base);
-  letter-spacing: var(--letter-spacing-tight);
-}
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-fixed);
+    background-color: color-mix(in srgb, var(--color-background) 86%, transparent);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition-normal);
+  }
 
-.nav-link {
-  color: var(--color-muted-foreground);
-  text-decoration: none;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  padding: 0.25rem 0.625rem;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-}
+  :global(html.scrolled) .site-header,
+  .site-header[data-nav-open="true"] {
+    border-bottom-color: var(--color-border);
+  }
 
-.nav-link:hover {
-  color: var(--color-foreground);
-  background-color: var(--color-muted);
-}
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    min-height: var(--header-height);
+  }
 
-.nav-link--active {
-  color: var(--color-foreground);
-  background-color: var(--color-muted);
-}
+  .site-header__brand {
+    font-family: var(--font-family-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-foreground);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* The burger precedes the nav in the DOM so that the open mobile panel
+     follows its trigger in the tab order. On desktop the nav belongs between
+     the brand and the actions, so flex order restores that layout. */
+  .site-header__nav {
+    order: 2;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-left: auto;
+  }
+
+  .site-header__link {
+    font-size: 0.9375rem;
+    color: var(--color-muted-foreground);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .site-header__link:hover {
+    color: var(--color-foreground);
+  }
+
+  .site-header__link[aria-current="page"] {
+    color: var(--color-foreground);
+    text-decoration: underline;
+    text-decoration-color: var(--color-brand);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
+  }
+
+  .site-header__actions {
+    order: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* Burger: hidden unless JS is present and we are at mobile width */
+  .site-header__burger {
+    order: 4;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: transparent;
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition:
+      border-color var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .site-header__burger:hover {
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+  }
+
+  .site-header__burger-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 1.15rem;
+    height: 1rem;
+  }
+
+  .site-header__burger-icon span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    border-radius: 2px;
+    background-color: currentColor;
+    transition:
+      transform var(--transition-fast),
+      opacity var(--transition-fast);
+  }
+
+  .site-header[data-nav-open="true"] .site-header__burger-icon span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .site-header[data-nav-open="true"] .site-header__burger-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-header[data-nav-open="true"] .site-header__burger-icon span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  :global(html.nav-open) {
+    overflow: hidden;
+  }
+
+  @media (max-width: 860px) {
+    .site-header__actions {
+      margin-left: auto;
+    }
+
+    /* Anchor the dropdown to the full-width header, not the padded container */
+    .site-header :global(.container) {
+      position: static;
+    }
+
+    /* Only collapse the nav when JS can drive the button */
+    :global(html.nav-collapsible) .site-header__burger {
+      display: inline-flex;
+    }
+
+    :global(html.nav-collapsible) .site-header__nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      max-height: calc(100dvh - var(--header-height));
+      overflow-y: auto;
+      padding: 0 var(--gutter) var(--gutter);
+      background-color: var(--color-background);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    :global(html.nav-collapsible)
+      .site-header[data-nav-open="true"]
+      .site-header__nav {
+      display: flex;
+    }
+
+    :global(html.nav-collapsible) .site-header__link {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 1.0625rem;
+      color: var(--color-foreground);
+      text-decoration: none;
+    }
+
+    :global(html.nav-collapsible) .site-header__link[aria-current="page"] {
+      color: var(--color-brand);
+    }
+  }
+
 </style>
+
+<script>
+  const MOBILE_QUERY = "(max-width: 860px)";
+  const root = document.documentElement;
+
+  const getHeader = () => document.querySelector<HTMLElement>(".site-header");
+  const getBurger = () =>
+    document.querySelector<HTMLButtonElement>(".site-header__burger");
+  const isOpen = () => getHeader()?.dataset.navOpen === "true";
+
+  let lastFocused: HTMLElement | null = null;
+
+  function setOpen(open: boolean, restoreFocus = true) {
+    const header = getHeader();
+    if (!header) return;
+
+    header.dataset.navOpen = open ? "true" : "false";
+    root.classList.toggle("nav-open", open);
+
+    const burger = getBurger();
+    if (burger) {
+      burger.setAttribute("aria-expanded", String(open));
+      burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    }
+
+    if (open) {
+      lastFocused = document.activeElement as HTMLElement | null;
+      header.querySelector<HTMLElement>(".site-header__link")?.focus();
+    } else if (restoreFocus && lastFocused) {
+      lastFocused.focus();
+      lastFocused = null;
+    } else {
+      lastFocused = null;
+    }
+  }
+
+  if (!root.dataset.navBound) {
+    root.dataset.navBound = "true";
+
+    document.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      if (target.closest(".site-header__burger")) {
+        setOpen(!isOpen());
+        return;
+      }
+
+      if (target.closest(".site-header__nav")) {
+        if (target.closest("a")) setOpen(false, false);
+        return;
+      }
+
+      if (isOpen() && !target.closest(".site-header")) setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOpen()) setOpen(false);
+    });
+
+    const mq = window.matchMedia(MOBILE_QUERY);
+    mq.addEventListener?.("change", (event) => {
+      if (!event.matches && isOpen()) setOpen(false, false);
+    });
+  }
+
+  root.classList.remove("nav-open");
+</script>

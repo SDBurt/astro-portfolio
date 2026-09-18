@@ -1,72 +1,35 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
-
 import PageLayout from "@/layouts/page-layout.astro";
 import Container from "@/components/container.astro";
-import FormattedDate from "@/components/formatted-date.astro";
-import { readingTime } from "@/lib/utils";
-import BackToPrev from "@/components/back-to-previous.astro";
-import Link from "@/components/link.astro";
+import EntryHeader from "@/components/entry-header.astro";
 
 export async function getStaticPaths() {
   const projects = (await getCollection("projects"))
-    .filter((post) => !post.data.draft)
+    .filter((project) => !project.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   return projects.map((project) => ({
     params: { slug: project.id },
     props: project,
   }));
 }
+
 type Props = CollectionEntry<"projects">;
 
 const project = Astro.props;
 const { Content } = await render(project);
 ---
 
-<PageLayout title={project.data.title} description={project.data.description} type="portfolio" datePublished={project.data.date} tags={project.data.tags}>
+<PageLayout
+  title={project.data.title}
+  description={project.data.description}
+  type="portfolio"
+  datePublished={project.data.date}
+  tags={project.data.tags}
+>
   <Container>
-    <div>
-      <BackToPrev href="/projects"> Back to projects </BackToPrev>
-    </div>
-    <div class="space-y-1 my-10">
-      <div class="flex items-center gap-1.5">
-        <div class="font-base text-sm">
-          <FormattedDate date={project.data.date} />
-        </div>
-        &bull;
-        <div class="font-base text-sm">
-          {readingTime(project.body || '')}
-        </div>
-      </div>
-      <h1 class="text-2xl font-semibold text-foreground tracking-tight">
-        {project.data.title}
-      </h1>
-      {
-        (project.data.demoURL || project.data.repoURL) && (
-          <nav class="flex gap-1">
-            {project.data.demoURL && (
-              <Link href={project.data.demoURL} external>
-                live site
-              </Link>
-            )}
-            {project.data.demoURL && project.data.repoURL && <span>/</span>}
-            {project.data.repoURL && (
-              <Link href={project.data.repoURL} external>
-                repo
-              </Link>
-            )}
-          </nav>
-        )
-      }
-      {project.data.tags.length > 0 && (
-        <div class="tag-list" style="margin-top:0.5rem;">
-          {project.data.tags.map((tag: string) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      )}
-    </div>
-    <article>
+    <EntryHeader entry={project} />
+    <article class="prose">
       <Content />
     </article>
   </Container>

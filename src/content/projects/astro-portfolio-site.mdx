@@ -17,13 +17,13 @@ A modern, performance-focused portfolio website showcasing my work as a software
 ## Technical Architecture
 
 ### Framework Choice
-- **Astro 7**: Rust-powered builds, the Content Layer API, and static-first architecture
-- **Astro components**: No client framework runtime or hydrated UI islands
+- **Astro 7**: Content Layer API, view transitions, and static-first architecture
+- **Vanilla TypeScript**: Progressive-enhancement scripts, no client framework runtime
 - **TypeScript**: Strict type safety across the entire codebase
 - **Vanilla CSS**: Custom design system with CSS custom properties for optimal performance
 
 ### Performance Optimizations
-- **Zero JavaScript by default**: Static HTML generation with selective hydration
+- **Zero JavaScript by default**: Static HTML enhanced with small progressive-enhancement scripts
 - **Asset optimization**: Hashed static assets with long-lived cache headers
 - **Font optimization**: Preloaded critical fonts with display swap
 - **Bundle optimization**: Tree shaking and selective component loading
@@ -31,7 +31,7 @@ A modern, performance-focused portfolio website showcasing my work as a software
 ## Key Features
 
 ### Accessibility First
-- **Semantic components**: Native HTML controls and landmarks wherever possible
+- **Native disclosure patterns**: Focus management and ARIA state on the mobile menu
 - **Skip navigation**: Keyboard navigation support
 - **Screen reader optimized**: Semantic HTML with proper ARIA labels
 - **Color contrast**: WCAG AA compliance across all themes
@@ -68,15 +68,15 @@ A modern, performance-focused portfolio website showcasing my work as a software
 - **Solution**: Built comprehensive design system with semantic CSS classes
 - **Result**: 40% reduction in CSS bundle size with improved maintainability
 
-### Astro 4 to 5 Migration
-- **Challenge**: Breaking changes in content collections and view transitions
-- **Solution**: Updated to new content layer API and ClientRouter
-- **Result**: Improved build performance and simplified content management
-
 ### Astro 5 to 7 Migration
 - **Challenge**: Updating the content, Markdown, Vite, and deployment contracts across two major versions
-- **Solution**: Migrated through Astro 6 first, moved plugins to the shared unified processor, and removed unused runtime integrations
+- **Solution**: Migrated through Astro 6 first, moved plugins to the shared unified processor, removed the React runtime, and rewrote the interactive bits as vanilla scripts
 - **Result**: Faster builds, fewer dependencies, and an assets-only deployment
+
+### Accessibility Implementation
+- **Challenge**: Maintaining complex interactions while ensuring full accessibility
+- **Solution**: Native disclosure patterns with keyboard focus management
+- **Result**: WCAG AA compliance with improved user experience
 
 ## Content Strategy
 
@@ -118,7 +118,7 @@ A modern, performance-focused portfolio website showcasing my work as a software
 ## Technical Stack
 
 **Framework**: Astro 7, TypeScript
-**Styling**: Vanilla CSS, CSS Custom Properties, PostCSS
+**Styling**: Vanilla CSS, CSS Custom Properties
 **Content**: MDX, Shiki, Remark/Rehype plugins
 **Deployment**: Cloudflare Workers Static Assets
 **Development**: Biome, Git Hooks, VS Code Extensions

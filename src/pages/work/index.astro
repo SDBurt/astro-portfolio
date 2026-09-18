@@ -1,47 +1,19 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import PageLayout from "@/layouts/page-layout.astro";
 import Container from "@/components/container.astro";
-import { dateRange } from "@/lib/utils";
+import PageIntro from "@/components/page-intro.astro";
+import WorkTimeline from "@/components/work-timeline.astro";
 import { WORK } from "@/config/site";
 
-const collection = (await getCollection("work")).sort(
-  (a, b) =>
-    new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf()
-);
-
-const work = await Promise.all(
-  collection.map(async (item) => {
-    const { Content } = await render(item);
-    return { ...item, Content };
-  })
+const work = (await getCollection("work")).sort(
+  (a, b) => b.data.dateStart.valueOf() - a.data.dateStart.valueOf()
 );
 ---
 
 <PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
-  <Container>
-    <h1 class="page-title" style="margin-bottom: var(--spacing-xl);">
-      {WORK.TITLE}
-    </h1>
-    <ul class="flex flex-col list-none work-list">
-        {
-          work.map((entry) => (
-            <li class="work-entry">
-              <div class="work-entry-header">
-                <div class="work-entry-company">
-                  {entry.data.company}
-                </div>
-                <div class="work-entry-meta">
-                  <span class="work-entry-role">{entry.data.role}</span>
-                  <span class="work-entry-date">{dateRange(entry.data.dateStart, entry.data.dateEnd)}</span>
-                </div>
-              </div>
-              <article class="work-entry-content">
-                <entry.Content />
-              </article>
-            </li>
-          ))
-        }
-      </ul>
+  <Container wide>
+    <PageIntro title={WORK.TITLE} />
+    <WorkTimeline entries={work} detailed />
   </Container>
 </PageLayout>

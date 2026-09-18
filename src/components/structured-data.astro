@@ -1,5 +1,5 @@
 ---
-import { SITE, HOME } from "@/config/site";
+import { SITE, HOME, AUTHOR, OG_IMAGE, SOCIALS } from "@/config/site";
 
 interface Props {
   type: "website" | "article" | "person" | "portfolio";
@@ -17,42 +17,45 @@ const {
   type,
   title = SITE.NAME,
   description = HOME.DESCRIPTION,
-  image = "/nano.png",
-  url = new URL(Astro.url.pathname.replace(/\/+$/, "") || "/", Astro.site).href,
+  image = OG_IMAGE,
+  url = Astro.url.href,
   datePublished,
   dateModified,
-  author = "Sean Burt",
+  author = AUTHOR.NAME,
   tags = [],
 } = Astro.props;
 
-const baseUrl = Astro.site?.href || "https://sdburt.com";
+const baseUrl = Astro.site?.href || "https://www.sdburt.com";
 const imageUrl = new URL(image, baseUrl).href;
+const logoUrl = new URL("/android-chrome-192x192.png", baseUrl).href;
+const profiles = SOCIALS.map((social) => social.HREF);
 
-type JsonLd = Record<string, unknown>;
-
-let structuredData: JsonLd = {
+let structuredData: Record<string, unknown> = {
   "@context": "https://schema.org",
-  "@type":
-    type === "website" ? "WebSite" : type === "article" ? "BlogPosting" : type === "person" ? "Person" : "CreativeWork",
-  name: title,
+  // `name` is the entity's own name, not the page title: for a Person node the
+  // page title ("About | SDBurt") is simply wrong.
+  "@type": type === "website" ? "WebSite" : type === "article" ? "BlogPosting" : type === "person" ? "Person" : "CreativeWork",
+  name: type === "person" ? author : title,
   description,
   url,
   image: imageUrl,
-  inLanguage: "en-US",
 };
 
 if (type === "website") {
   structuredData = {
     ...structuredData,
-    author: {
+    // `publisher` is the property WebSite expects; `author` was wrong here and
+    // a SearchAction is meaningless on a site with no search.
+    publisher: {
       "@type": "Person",
       name: author,
       url: baseUrl,
-      jobTitle: "Software Engineer",
+      jobTitle: AUTHOR.JOB_TITLE,
       worksFor: {
         "@type": "Organization",
-        name: "Consumer Genius",
+        name: AUTHOR.WORKS_FOR,
       },
+      sameAs: profiles,
     },
   };
 } else if (type === "article") {
@@ -65,11 +68,17 @@ if (type === "website") {
       "@type": "Person",
       name: author,
       url: baseUrl,
+      sameAs: profiles,
     },
+    // Article rich results expect an Organization publisher with a logo.
     publisher: {
-      "@type": "Person",
+      "@type": "Organization",
       name: author,
       url: baseUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: logoUrl,
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -81,60 +90,24 @@ if (type === "website") {
   structuredData = {
     ...structuredData,
     "@type": "Person",
-    givenName: "Sean",
-    familyName: "Burt",
-    jobTitle: "Software Engineer",
+    givenName: author.split(" ")[0],
+    familyName: author.split(" ").slice(1).join(" "),
+    jobTitle: AUTHOR.JOB_TITLE,
     worksFor: {
       "@type": "Organization",
-      name: "Consumer Genius",
+      name: AUTHOR.WORKS_FOR,
     },
-    alumniOf: {
+    alumniOf: AUTHOR.ALUMNI_OF.map((school) => ({
       "@type": "EducationalOrganization",
-      name: "University of Victoria",
-    },
-    knowsAbout: [
-      "Software Engineering",
-      "Machine Learning",
-      "Data Engineering",
-      "Web Development",
-      "AI",
-      "Data Science",
-    ],
-    sameAs: ["https://github.com/SDBurt", "https://linkedin.com/in/seandburt"],
+      name: school,
+    })),
+    knowsAbout: AUTHOR.KNOWS_ABOUT,
+    sameAs: profiles,
   };
 }
 
 // Remove undefined values
 structuredData = JSON.parse(JSON.stringify(structuredData));
-
-// Build BreadcrumbList for nested pages
-const pathname = Astro.url.pathname;
-const segments = pathname.split("/").filter(Boolean);
-let breadcrumbData: JsonLd | null = null;
-
-if (segments.length > 0) {
-  const items = [{ "@type": "ListItem", position: 1, name: "Home", item: baseUrl }];
-
-  for (let i = 0; i < segments.length; i++) {
-    const isLast = i === segments.length - 1;
-    const itemUrl = new URL(segments.slice(0, i + 1).join("/"), baseUrl).href;
-    items.push({
-      "@type": "ListItem",
-      position: i + 2,
-      name: isLast && title ? title : segments[i].charAt(0).toUpperCase() + segments[i].slice(1),
-      item: itemUrl,
-    });
-  }
-
-  breadcrumbData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: items,
-  };
-}
 ---
 
 <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-{breadcrumbData && (
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbData)} />
-)}

@@ -1,4 +1,6 @@
 ---
+import Container from "@/components/container.astro";
+import PageIntro from "@/components/page-intro.astro";
 import Layout from "@/layouts/page-layout.astro";
 ---
 
@@ -7,9 +9,10 @@ import Layout from "@/layouts/page-layout.astro";
   description="Recognition for security researchers who have responsibly disclosed vulnerabilities"
   type="website"
 >
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <div class="prose prose-lg max-w-none">
-      <h1>Security Acknowledgments</h1>
+  <Container>
+    <PageIntro title="Security Acknowledgments" />
+
+    <article class="prose">
       
       <p class="lead">
         We recognize and thank security researchers who have responsibly disclosed 
@@ -131,73 +134,26 @@ import Layout from "@/layouts/page-layout.astro";
         responsible disclosure practices.
       </p>
 
-      <p class="text-sm text-muted-foreground mt-8">
+      <p class="doc-meta">
         <strong>Last Updated:</strong> January 6, 2025<br>
         <strong>Version:</strong> 1.0
       </p>
-    </div>
-  </div>
+    </article>
+  </Container>
 </Layout>
 
 <style>
-.prose {
-  color: var(--color-foreground);
-}
-
-.prose h1 {
-  color: var(--color-foreground);
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
-  margin-bottom: var(--spacing-lg);
-}
-
-.prose h2 {
-  color: var(--color-foreground);
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  margin-top: var(--spacing-2xl);
-  margin-bottom: var(--spacing-md);
-}
-
-.prose h3 {
-  color: var(--color-foreground);
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  margin-bottom: var(--spacing-sm);
-}
-
-.prose p {
-  margin-bottom: var(--spacing-md);
-  line-height: var(--line-height-relaxed);
-}
-
-.prose ul, .prose ol {
-  margin-bottom: var(--spacing-md);
-  padding-left: var(--spacing-lg);
-}
-
-.prose li {
-  margin-bottom: var(--spacing-xs);
-}
-
-.prose a {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
-.prose a:hover {
-  text-decoration: none;
-}
-
-.prose strong {
-  font-weight: 600;
-  color: var(--color-foreground);
-}
-
+/* Typography comes from the global `.prose` + `article` rules; only the
+   document-specific bits live here. */
 .lead {
-  font-size: var(--font-size-lg);
   color: var(--color-muted-foreground);
   margin-bottom: var(--spacing-xl);
+}
+
+.doc-meta {
+  margin-top: var(--spacing-xl);
+  font-size: var(--font-size-sm);
+  color: var(--color-muted-foreground);
 }
 
 .acknowledgment-section {
@@ -258,9 +214,5 @@ import Layout from "@/layouts/page-layout.astro";
   border-left: 4px solid var(--color-primary);
   font-style: italic;
   margin: var(--spacing-xl) 0;
-}
-
-.max-w-4xl {
-  max-width: 56rem;
 }
 </style>

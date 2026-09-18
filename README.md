@@ -9,22 +9,22 @@ Visit [sdburt.com](https://sdburt.com) to see the portfolio in action.
 ## ✨ Features
 
 - **Modern Stack**: Astro 7 with TypeScript and zero client framework runtime
-- **Accessible Design**: Semantic Astro components, keyboard navigation, and reduced-motion support
-- **Performance Optimized**: Static HTML, vanilla CSS, optimized local assets, and Cloudflare's CDN
-- **Content Management**: MDX with syntax highlighting, automatic table of contents, and enhanced plugins
+- **Accessible Design**: Native disclosure patterns with focus management and proper ARIA state
+- **Performance Optimized**: Static HTML, vanilla CSS, and Cloudflare's CDN
+- **Content Management**: MDX with syntax highlighting and enhanced plugins
 - **SEO Ready**: Structured data, Open Graph tags, and automatic sitemap generation
 - **Dark Mode**: System preference detection with manual toggle
 - **Fast Navigation**: Prefetching and view transitions for smooth UX
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Astro 7](https://astro.build) - Static site generator with islands architecture
+- **Framework**: [Astro 7](https://astro.build) - Static site generator with content collections and view transitions
 - **UI Components**: Astro components with no client-side framework runtime
 - **Styling**: Vanilla CSS with custom design system and CSS custom properties
 - **Content**: [MDX](https://mdxjs.com) with [Shiki](https://shiki.matsu.io) syntax highlighting
 - **Deployment**: [Cloudflare Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/)
 - **Analytics**: [PostHog](https://posthog.com/)
-- **Fonts**: Plus Jakarta Sans and JetBrains Mono
+- **Fonts**: Inter (sans-serif), Crimson Text (serif), JetBrains Mono (monospace)
 
 ## 📦 Installation & Development
 
@@ -73,8 +73,7 @@ Static files are uploaded from `dist/` according to `wrangler.toml`; there is no
 ```
 ├── public/                  # Static assets (favicon, images)
 ├── src/
-│   ├── components/         # Reusable UI components
-│   │   └── *.astro        # Core site components
+│   ├── components/         # Reusable UI components (Astro)
 │   ├── content/           # Content collections
 │   │   ├── blog/          # Blog posts (MDX)
 │   │   ├── projects/      # Project showcases
@@ -85,7 +84,7 @@ Static files are uploaded from `dist/` according to `wrangler.toml`; there is no
 │   ├── lib/               # Utility functions
 │   └── config/            # Site configuration
 ├── astro.config.mjs       # Astro configuration
-├── content.config.ts      # Content collections schema
+├── src/content.config.ts  # Content collections schema
 ├── wrangler.toml          # Cloudflare Workers Static Assets configuration
 └── package.json
 ```
@@ -94,9 +93,9 @@ Static files are uploaded from `dist/` according to `wrangler.toml`; there is no
 
 The site uses a custom vanilla CSS design system with:
 
-- **Color System**: Primary blue (#3b82f6) with semantic color tokens
+- **Color System**: Bone paper and forest ink with matcha accents, as semantic color tokens
 - **Typography Scale**: Consistent sizing with rem units
-- **Spacing System**: 4px-based spacing scale
+- **Spacing System**: rem-based spacing scale
 - **Component Classes**: Semantic CSS classes for consistency
 - **Dark Mode**: CSS custom properties with system preference detection
 
@@ -124,14 +123,14 @@ Key configuration files:
 
 - `src/config/site.ts` - Site metadata, navigation, and social links
 - `astro.config.mjs` - Astro framework configuration
-- `content.config.ts` - Content collection schemas
+- `src/content.config.ts` - Content collection schemas
 - `biome.json` - Code formatting and linting rules
 
 ## 📊 Performance
 
 - **Lighthouse Score**: 95+ across all categories
 - **Core Web Vitals**: Optimized for LCP, CLS, and FID
-- **Bundle Size**: Minimal JavaScript with selective hydration
+- **Bundle Size**: Minimal JavaScript, static HTML with progressive enhancement
 - **Image Optimization**: Astro asset pipeline support for local images
 
 ## 🔐 Security
@@ -186,7 +185,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 📞 Contact
 
 - **Email**: seandburt@gmail.com
-- **LinkedIn**: [sean-d-burt](https://linkedin.com/in/sean-d-burt)
+- **LinkedIn**: [seandburt](https://www.linkedin.com/in/seandburt)
 - **GitHub**: [sdburt](https://github.com/sdburt)
 
 ---

@@ -1,7 +1,10 @@
 # Pre-commit validation
 echo "Validating code before commit..."
 
-# Type checking & Build verification
+# Lint, type checking & Build verification
+echo "→ Running lint..."
+pnpm lint
+
 echo "→ Running Check and Building project..."
 pnpm build
 

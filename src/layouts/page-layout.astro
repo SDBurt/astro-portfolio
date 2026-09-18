@@ -34,7 +34,7 @@ const { title, description, type = "website", image, datePublished, dateModified
     />
     <StructuredData
       type={type}
-      title={`${title} ${SEPARATOR} ${SITE.NAME}`}
+      title={title}
       description={description}
       image={image}
       datePublished={datePublished}
@@ -44,11 +44,11 @@ const { title, description, type = "website", image, datePublished, dateModified
     <PostHog />
   </head>
   <body
-    class="font-sans antialiased flex flex-col bg-background dark:bg-background/75 text-foreground dark:text-foreground/75"
+    class="font-sans antialiased flex flex-col bg-background text-foreground"
   >
     <SkipToContent />
     <Header />
-    <main id="main-content" class="flex-1 py-32">
+    <main id="main-content" class="flex-1 site-main">
       <slot />
     </main>
     <Footer />

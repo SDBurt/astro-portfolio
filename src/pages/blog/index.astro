@@ -2,51 +2,34 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import PageLayout from "@/layouts/page-layout.astro";
 import Container from "@/components/container.astro";
-import SimpleLink from "@/components/simple-link.astro";
+import EntryRows from "@/components/entry-rows.astro";
+import PageIntro from "@/components/page-intro.astro";
 import { BLOG } from "@/config/site";
 
 const data = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-type Acc = {
-  [year: string]: CollectionEntry<"blog">[];
-};
-
-const posts = data.reduce((acc: Acc, post) => {
+const posts = data.reduce<Record<string, CollectionEntry<"blog">[]>>((acc, post) => {
   const year = post.data.date.getFullYear().toString();
-  if (!acc[year]) {
-    acc[year] = [];
-  }
+  acc[year] ??= [];
   acc[year].push(post);
   return acc;
 }, {});
 
-const years = Object.keys(posts).sort((a, b) => Number.parseInt(b, 10) - Number.parseInt(a, 10));
+const years = Object.keys(posts).sort((a, b) => Number(b) - Number(a));
 ---
 
 <PageLayout title={BLOG.TITLE} description={BLOG.DESCRIPTION}>
-  <Container>
-    <h1 class="page-title" style="margin-bottom: var(--spacing-xl);">
-      {BLOG.TITLE}
-    </h1>
-    <div class="space-y-16">
-        {
-          years.map((year) => (
-            <section class="space-y-6">
-              <h2 class="section-header">
-                {year}
-              </h2>
-              <ul class="flex flex-col list-none space-y-4">
-                {posts[year].map((post) => (
-                  <li>
-                    <SimpleLink entry={post} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))
-        }
-      </div>
+  <Container wide>
+    <PageIntro title={BLOG.TITLE} />
+    {
+      years.map((year) => (
+        <section class="section" aria-labelledby={`year-${year}`}>
+          <h2 id={`year-${year}`} class="section__title">{year}</h2>
+          <EntryRows entries={posts[year]} />
+        </section>
+      ))
+    }
   </Container>
 </PageLayout>
