@@ -5,8 +5,7 @@ import Footer from "@/components/page-footer.astro";
 import SkipToContent from "@/components/skip-to-content.astro";
 import StructuredData from "@/components/structured-data.astro";
 import { SITE, SEPARATOR } from "@/config/site";
-import Analytics from "@vercel/analytics/astro";
-import SpeedInsights from "@vercel/speed-insights/astro";
+import PostHog from "@/components/posthog.astro";
 
 type Props = {
   title: string;
@@ -28,6 +27,10 @@ const { title, description, type = "website", image, datePublished, dateModified
       title={`${title} ${SEPARATOR} ${SITE.NAME}`}
       description={description}
       image={image}
+      type={type}
+      datePublished={datePublished}
+      dateModified={dateModified}
+      tags={tags}
     />
     <StructuredData
       type={type}
@@ -38,6 +41,7 @@ const { title, description, type = "website", image, datePublished, dateModified
       dateModified={dateModified}
       tags={tags}
     />
+    <PostHog />
   </head>
   <body
     class="font-sans antialiased flex flex-col bg-background text-foreground"
@@ -48,7 +52,5 @@ const { title, description, type = "website", image, datePublished, dateModified
       <slot />
     </main>
     <Footer />
-    <Analytics />
-    <SpeedInsights />
   </body>
 </html>

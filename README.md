@@ -1,16 +1,16 @@
 # Sean Burt - Portfolio & Blog
 
-A modern, performance-focused portfolio website built with Astro, showcasing software engineering projects and technical writing.
+A modern, performance-focused portfolio website built with Astro 7, showcasing software engineering projects and technical writing.
 
 ## 🚀 Live Site
 
-Visit [sdburt.com](https://www.sdburt.com) to see the portfolio in action.
+Visit [sdburt.com](https://sdburt.com) to see the portfolio in action.
 
 ## ✨ Features
 
-- **Modern Stack**: Astro 7 with TypeScript and no UI framework
+- **Modern Stack**: Astro 7 with TypeScript and zero client framework runtime
 - **Accessible Design**: Native disclosure patterns with focus management and proper ARIA state
-- **Performance Optimized**: Vanilla CSS design system, image optimization, and Vercel Speed Insights
+- **Performance Optimized**: Static HTML, vanilla CSS, and Cloudflare's CDN
 - **Content Management**: MDX with syntax highlighting and enhanced plugins
 - **SEO Ready**: Structured data, Open Graph tags, and automatic sitemap generation
 - **Dark Mode**: System preference detection with manual toggle
@@ -19,11 +19,11 @@ Visit [sdburt.com](https://www.sdburt.com) to see the portfolio in action.
 ## 🛠️ Tech Stack
 
 - **Framework**: [Astro 7](https://astro.build) - Static site generator with content collections and view transitions
-- **Interactivity**: Vanilla TypeScript progressive enhancement
+- **UI Components**: Astro components with no client-side framework runtime
 - **Styling**: Vanilla CSS with custom design system and CSS custom properties
 - **Content**: [MDX](https://mdxjs.com) with [Shiki](https://shiki.matsu.io) syntax highlighting
-- **Deployment**: [Vercel](https://vercel.com)
-- **Analytics**: [Vercel Speed Insights](https://vercel.com/docs/speed-insights)
+- **Deployment**: [Cloudflare Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/)
+- **Analytics**: [PostHog](https://posthog.com/)
 - **Fonts**: Inter (sans-serif), Crimson Text (serif), JetBrains Mono (monospace)
 
 ## 📦 Installation & Development
@@ -33,7 +33,7 @@ Visit [sdburt.com](https://www.sdburt.com) to see the portfolio in action.
 git clone https://github.com/sdburt/astro-portfolio.git
 cd astro-portfolio
 
-# Install dependencies (requires Node.js 22+)
+# Install dependencies (requires Node.js 22.12+)
 pnpm install
 
 # Start development server
@@ -56,9 +56,17 @@ pnpm format
 
 # Lint code with Biome
 pnpm lint
+
+# Validate the Workers deployment without publishing
+pnpm deploy:dry-run
 ```
 
-The site is automatically deployed to Vercel on pushes to the main branch.
+The production build is deployed as an assets-only Cloudflare Worker. Configure a Workers Builds project with:
+
+- Build command: `pnpm build`
+- Deploy command: `pnpm wrangler deploy`
+
+Static files are uploaded from `dist/` according to `wrangler.toml`; there is no Worker script or server runtime.
 
 ## 📁 Project Structure
 
@@ -76,6 +84,8 @@ The site is automatically deployed to Vercel on pushes to the main branch.
 │   ├── lib/               # Utility functions
 │   └── config/            # Site configuration
 ├── astro.config.mjs       # Astro configuration
+├── src/content.config.ts  # Content collections schema
+├── wrangler.toml          # Cloudflare Workers Static Assets configuration
 └── package.json
 ```
 
@@ -121,7 +131,7 @@ Key configuration files:
 - **Lighthouse Score**: 95+ across all categories
 - **Core Web Vitals**: Optimized for LCP, CLS, and FID
 - **Bundle Size**: Minimal JavaScript, static HTML with progressive enhancement
-- **Image Optimization**: Automatic WebP conversion and responsive sizing
+- **Image Optimization**: Astro asset pipeline support for local images
 
 ## 🔐 Security
 
@@ -137,7 +147,7 @@ This portfolio implements comprehensive security measures:
 ### Security Files
 - **robots.txt**: Blocks crawlers from sensitive paths
 - **security.txt**: RFC 9116 compliant security disclosure information
-- **vercel.json**: Server-level security header configuration
+- **public/_headers**: Cloudflare static-asset security and cache headers
 
 ### Security Monitoring
 ```bash
@@ -155,7 +165,7 @@ pnpm run security:update
 - No user authentication or sensitive data storage
 - Static site generation for minimal attack surface
 - Dependency vulnerability scanning
-- Secure content delivery via Vercel edge network
+- Secure content delivery via Cloudflare's edge network
 - Regular security updates and monitoring
 
 ## 🤝 Contributing

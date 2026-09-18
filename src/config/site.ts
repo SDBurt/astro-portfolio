@@ -37,7 +37,7 @@ export const FEED: Metadata = {
 
 export const HOME: Metadata = {
   TITLE: "Software Engineer",
-  DESCRIPTION: "Sean Burt - Software engineer specializing in web development and machine learning.",
+  DESCRIPTION: "Sean Burt - Software engineer who loves turning messy data into something useful.",
 };
 
 export const BLOG: Metadata = {

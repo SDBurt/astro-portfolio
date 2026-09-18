@@ -1,28 +1,34 @@
 import type { APIRoute } from "astro";
 
-// Single source of truth for robots.txt: `public/robots.txt` used to shadow this
-// route, so edits here silently did nothing.
-const robotsTxt = `User-agent: *
+const sitemapUrl = new URL("sitemap-index.xml", import.meta.env.SITE).href;
+
+const robotsTxt = `
+User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /admin/
-Disallow: /private/
-Disallow: /.git/
-Disallow: /node_modules/
-Disallow: /config/
-Disallow: /logs/
+
+# Block query parameter variants from being indexed
+Disallow: /*?*ref=
 Disallow: /*?*session=
 Disallow: /*?*token=
+Disallow: /*?*utm_
 
-# security.txt is deliberately crawlable (RFC 9116)
+# Block non-content paths
+Disallow: /api/
+Disallow: /.well-known/
+Disallow: /admin/
+Disallow: /private/
 
-User-agent: Googlebot-Image
-Allow: /
+# Block common attack vectors
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /.env
+Disallow: /*wp-admin/
+Disallow: /*wp-login.php
+Disallow: /*wp-content/
 
-Crawl-delay: 1
-
-Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}
-`;
+# Sitemap
+Sitemap: ${sitemapUrl}
+`.trim();
 
 export const GET: APIRoute = () => {
   return new Response(robotsTxt, {
