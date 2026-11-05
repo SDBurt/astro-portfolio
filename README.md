@@ -33,7 +33,11 @@ Visit [sdburt.com](https://sdburt.com) to see the portfolio in action.
 git clone https://github.com/sdburt/astro-portfolio.git
 cd astro-portfolio
 
-# Install dependencies (requires Node.js 22.12+)
+# Select the project's patched Node.js 22 release
+nvm install
+nvm use
+
+# Install dependencies (requires Node.js 22.23.4 or newer within 22.x)
 pnpm install
 
 # Start development server
@@ -167,6 +171,11 @@ pnpm run security:update
 - Dependency vulnerability scanning
 - Secure content delivery via Cloudflare's edge network
 - Regular security updates and monitoring
+
+The `pnpm.packageExtensions` entry in `package.json` supplies the missing
+`@emnapi/runtime` dependency for `@astrojs/astro2tsx` 0.1.3. It matches runtime
+1.11.3 to that package's core library so the type checker does not load an
+incompatible 2.0 beta runtime. Revisit this extension when upgrading `astro2tsx`.
 
 ## 🤝 Contributing
 
